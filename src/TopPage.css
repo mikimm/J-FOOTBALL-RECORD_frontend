@@ -13,7 +13,7 @@ main{
     margin-left: auto;
     margin-right: auto;
     border-radius: 30px;
-    padding-top: 30px;
+    padding-top: 30px;    
 }
 .team-logo{
     width: 50px;
@@ -21,34 +21,31 @@ main{
 }
 .record{
   list-style:none;
-  padding-top: 5%;
-  display:flex;
-  justify-content: center;
   align-items: center; 
-  text-align: center;
 }
-.record-match-day{
-    margin-top: 0px;
-    margin-bottom: 0px;
+.record-list{
+  border-collapse: separate;
+  border-spacing: 20px 30px;
 }
 .team-logo{
     text-align: center;
 }
-.title{
-    margin-left: 5%;
-}
-.match-day{
-    margin-left: 5%;
-}
-.created-by{
-      margin-left: 5%;  
-}
 .pagination_box{
-    margin-top: 5%;
     text-align: center;
     background-color: #ffffff;
     width: 10%;
     margin-left: auto;
     margin-right: auto;
     border-radius: 30px;
+    margin-top: 30px;
+}
+.match-info{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 500px;
+    margin-left: 100px;
+}
+.record-header{
+    text-align: center;
 }
