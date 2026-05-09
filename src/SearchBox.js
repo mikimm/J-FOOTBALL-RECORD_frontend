@@ -22,9 +22,12 @@ function SearchBox({ changeTarget }) {
         id="pvB"
         style={{
           backgroundColor: "#F5F5F5",
+          marginLeft: "1%",
         }}
         onClick={() =>
-          changeTarget(`http://127.0.0.1:8000/api/v1/records/?title=${value}`)
+          changeTarget(
+            `http://127.0.0.1:8000/api/v1/records/list?ordering=-id&title=${value}`,
+          )
         }
       >
         <i class="bi bi-search"></i>

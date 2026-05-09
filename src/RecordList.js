@@ -3,10 +3,11 @@ import SearchBox from "./SearchBox";
 import "./TopPage.css";
 import Button from "react-bootstrap/Button";
 import React, { useState, useEffect } from "react";
+import { Display } from "react-bootstrap-icons";
 function RecordList() {
   const [records, setRecords] = useState([]);
   const [target, setTarget] = useState(
-    "http://127.0.0.1:8000/api/v1/records/?ordering=-id",
+    "http://127.0.0.1:8000/api/v1/records/list?ordering=-id",
   );
   useEffect(() => {
     fetch(target, {
@@ -43,77 +44,96 @@ function RecordList() {
           }}
           onClick={() => {
             if (
-              target === "http://127.0.0.1:8000/api/v1/records/?ordering=-id"
+              target ===
+              "http://127.0.0.1:8000/api/v1/records/list?ordering=-id"
             ) {
               setOrder(order === "up" ? "down" : "up");
-              setTarget("http://127.0.0.1:8000/api/v1/records/?ordering=id");
+              setTarget(
+                "http://127.0.0.1:8000/api/v1/records/list?ordering=id",
+              );
             } else {
               setOrder(order === "up" ? "down" : "up");
-              setTarget("http://127.0.0.1:8000/api/v1/records/?ordering=-id");
+              setTarget(
+                "http://127.0.0.1:8000/api/v1/records/list?ordering=-id",
+              );
             }
           }}
         >
           <i class={`bi bi-arrow-${order}-square-fill`}></i>
         </Button>
-        <table className="record-list">
-          <thead>
-            <tr className="record-header">
-              <th>試合</th>
-              <th>タイトル</th>
-              <th>試合日</th>
-              <th>作成者</th>
-              <th>いいね数</th>
-            </tr>
-          </thead>
-          <tbody style={{ textAlign: "center" }}>
-            {records.results ? (
-              records.results.map((record, index) => (
-                <tr key={index} className="record">
-                  <td className="match-info">
-                    <div className="home_team">
-                      <img className="team-logo" src={record.home_team_logo} />
-
-                      <div className="home-team-name">
-                        {record.home_team_name}(Home)
-                      </div>
-                    </div>
-
-                    <div className="game">
-                      <div className="round">
-                        第{record.round}節<br />
-                        {record.home_score}-{record.away_score}
-                      </div>
-                    </div>
-
-                    <div className="away_team">
-                      <img className="team-logo" src={record.away_team_logo} />
-
-                      <div className="away-team-name">
-                        {record.away_team_name}(Away)
-                      </div>
-                    </div>
-                  </td>
-                  <td className="title">
-                    <p>{record.title}</p>
-                  </td>
-                  <td className="match-day">
-                    <p className="record-match-day">{record.match_day}</p>
-                  </td>
-                  <td className="created-by">
-                    <p>{record.created_by_id}</p>
-                  </td>
-                  <td className="nice-count">
-                    <p class="fa fa-soccer-ball-o"></p>
-                    <p>{record.nice_count}</p>
-                  </td>
+        {records.results ? (
+          records.results.length === 0 ? (
+            <h1 style={{ textAlign: "center", marginTop: "20%" }}>Not Found</h1>
+          ) : (
+            <table className="record-list">
+              <thead>
+                <tr className="record-header">
+                  <th>試合</th>
+                  <th>タイトル</th>
+                  <th>試合日</th>
+                  <th>作成者</th>
+                  <th>いいね数</th>
                 </tr>
-              ))
-            ) : (
-              <h1>該当データがありません。</h1>
-            )}
-          </tbody>
-        </table>
-        <PageNation records={records} changeTarget={setTarget} />
+              </thead>
+              {records.results.map((record, index) => (
+                <tbody style={{ textAlign: "center" }}>
+                  <tr key={index} className="record">
+                    <td className="match-info">
+                      <div className="home_team">
+                        <img
+                          className="team-logo"
+                          src={record.home_team.team_logo}
+                        />
+
+                        <div className="home-team-name">
+                          {record.home_team.team_name}(Home)
+                        </div>
+                      </div>
+
+                      <div className="game">
+                        <div className="round">
+                          第{record.round}節<br />
+                          {record.home_score}-{record.away_score}
+                        </div>
+                      </div>
+
+                      <div className="away_team">
+                        <img
+                          className="team-logo"
+                          src={record.away_team.team_logo}
+                        />
+
+                        <div className="away-team-name">
+                          {record.away_team.team_name}(Away)
+                        </div>
+                      </div>
+                    </td>
+                    <td className="title">
+                      <p>{record.title}</p>
+                    </td>
+                    <td className="match-day">
+                      <p className="record-match-day">{record.match_day}</p>
+                    </td>
+                    <td className="user-name">
+                      <p>{record.user_name}</p>
+                    </td>
+                    <td className="nice-count">
+                      <p class="fa fa-soccer-ball-o"></p>
+                      <p>{record.nice_count}</p>
+                    </td>
+                  </tr>
+                </tbody>
+              ))}
+            </table>
+          )
+        ) : (
+          <h1 style={{ textAlign: "center", marginTop: "20%" }}>Loading...</h1>
+        )}
+        {records.results && records.results.length > 0 ? (
+          <PageNation records={records} changeTarget={setTarget} />
+        ) : (
+          <></>
+        )}
       </div>
     </main>
   );
