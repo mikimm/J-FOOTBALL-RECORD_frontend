@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from "react";
-function TeamsList(league) {
+function TeamsList({ leagueNumber }) {
   const [list_info, setInfo] = useState([]);
   const chunkSize = 4;
   const groupedTeams = [];
   useEffect(() => {
-    if (league.leagueNumber) {
-      let target = "http://127.0.0.1:8000/api/v1/teams/" + league.leagueNumber;
+    if (leagueNumber) {
+      let target = "http://127.0.0.1:8000/api/v1/teams/" + leagueNumber;
       fetch(target, {
         credentials: "same-origin",
       })
@@ -21,7 +21,7 @@ function TeamsList(league) {
           console.error(error);
         });
     }
-  }, [league.leagueNumber]);
+  }, [leagueNumber]);
 
   for (let i = 0; i < list_info.length; i += chunkSize) {
     groupedTeams.push(list_info.slice(i, i + chunkSize));
