@@ -37,7 +37,7 @@ main{
     margin-left: auto;
     margin-right: auto;
     border-radius: 30px;
-    margin-top: 30px;
+    margin-top: 10px;
 }
 .match-info{
     display: flex;
@@ -48,4 +48,19 @@ main{
 }
 .record-header{
     text-align: center;
+}
+.home_team{
+    width: 150px;
+}
+.away_team{
+    width: 150px;
+}
+.title{
+   text-align: left;
+}
+.user-name{
+    text-align: left;
+}
+.match-day{
+    text-align: left;
 }

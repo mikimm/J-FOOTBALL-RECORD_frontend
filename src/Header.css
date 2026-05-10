@@ -2,17 +2,6 @@ header{
     background-color: black;
     padding: 20px;
 }
-.app-title{
-    color: white;
-    font-size: 25px;
-    display: inline-block;
-}
-.app-record-list-menue{
-    margin-left: 30%;
-    color: white;
-    font-size: 15px;
-    display: inline-block;
-}
 .app-ranking-menue{
     margin-left: 5%;
     color: white;
@@ -25,6 +14,7 @@ header{
     font-size: 15px;
     display: inline-block;
 }
+
 .app-user-menue{
     margin-left: 5%;
     color: white;

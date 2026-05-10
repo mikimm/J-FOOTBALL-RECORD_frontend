@@ -2,7 +2,11 @@ import PageNation from "./PageNation";
 import SearchBox from "./SearchBox";
 import "./TopPage.css";
 import Button from "react-bootstrap/Button";
+<<<<<<< Updated upstream
 import React, { useState, useEffect } from "react";
+=======
+import { useState, useEffect } from "react";
+>>>>>>> Stashed changes
 function RecordList() {
   const [records, setRecords] = useState([]);
   const [target, setTarget] = useState(
