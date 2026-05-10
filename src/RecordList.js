@@ -3,7 +3,6 @@ import SearchBox from "./SearchBox";
 import "./TopPage.css";
 import Button from "react-bootstrap/Button";
 import React, { useState, useEffect } from "react";
-import { Display } from "react-bootstrap-icons";
 function RecordList() {
   const [records, setRecords] = useState([]);
   const [target, setTarget] = useState(
