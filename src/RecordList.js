@@ -85,7 +85,8 @@ function RecordList() {
                         />
 
                         <div className="home-team-name">
-                          {record.home_team.team_name}(Home)
+                          {record.home_team.team_name}
+                          <br></br>(Home)
                         </div>
                       </div>
 
@@ -103,7 +104,8 @@ function RecordList() {
                         />
 
                         <div className="away-team-name">
-                          {record.away_team.team_name}(Away)
+                          {record.away_team.team_name}
+                          <br></br>(Away)
                         </div>
                       </div>
                     </td>

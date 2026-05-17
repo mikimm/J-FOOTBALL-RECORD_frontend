@@ -8,7 +8,7 @@ function Teams() {
   return (
     <main>
       <div className="Teams">
-        <h1 className="menue-title">J Leagues</h1>
+        <h1 className="menue-title">J Teams</h1>
         <Tabs
           id="controlled-tab-example"
           onSelect={(key) => {
@@ -20,13 +20,13 @@ function Teams() {
             marginTop: "20px",
           }}
         >
-          <Tab eventKey="1" title="J1 League">
+          <Tab tabClassName="j1_tab" eventKey="1" title="J1 League">
             <TeamsList leagueNumber={1} />
           </Tab>
-          <Tab eventKey="2" title="J2 League">
+          <Tab tabClassName="j2_tab" eventKey="2" title="J2 League">
             <TeamsList leagueNumber={2} />
           </Tab>
-          <Tab eventKey="3" title="J3 League">
+          <Tab tabClassName="j3_tab" eventKey="3" title="J3 League">
             <TeamsList leagueNumber={3} />
           </Tab>
         </Tabs>

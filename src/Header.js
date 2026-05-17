@@ -24,7 +24,17 @@ function Header() {
       >
         投稿一覧
       </Nav.Link>
-      <h1 className="app-ranking-menue">順位表</h1>
+      <Nav.Link
+        href={"/ranking"}
+        style={{
+          marginLeft: "5%",
+          color: "white",
+          fontSize: "15px",
+          display: "inline-block",
+        }}
+      >
+        <h1 className="app-ranking-menue">順位表</h1>
+      </Nav.Link>
       <Nav.Link
         href={"/teams"}
         style={{

@@ -6,3 +6,12 @@
     font-weight: bold;
     margin-top: 20px;
 }
+.j1_tab {
+ color: red !important;
+}
+.j2_tab {
+ color: green !important;
+}
+.j3_tab {
+ color: blue !important;
+}
