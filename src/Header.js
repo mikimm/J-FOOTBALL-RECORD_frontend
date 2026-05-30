@@ -46,10 +46,7 @@ function Header() {
       >
         チーム一覧
       </Nav.Link>
-      <h1 className="app-user-menue">
-        <img className="profile_icon" src="images/profile_icon.png" />
-        mikihiro
-      </h1>
+      <h1 className="app-user-menue">mikihiro</h1>
       <h1 className="app-logout-menue">ログアウト</h1>
     </header>
   );

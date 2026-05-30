@@ -1,0 +1,21 @@
+.team_images{
+    text-align: center;
+}
+.team_info{
+    text-align: left;
+}
+.team_detail{
+    align-items: center;
+    margin-top: 80px;
+}
+.team_info_tab,
+.player_info_tab {
+  color: black !important;
+  background-color: white !important;
+}
+
+.team_info_tab.active,
+.player_info_tab.active {
+  background-color: black !important;
+  color: white !important;
+}

@@ -40,7 +40,9 @@ function TeamsList({ leagueNumber }) {
             <tbody>
               {group.map((team) => (
                 <tr key={team.id}>
-                  <td>{team.team_name}</td>
+                  <td>
+                    <a href={`/team/${team.id}`}>{team.team_name}</a>
+                  </td>
                   <td>
                     <img src={team.team_logo} alt={team.team_name} />
                   </td>

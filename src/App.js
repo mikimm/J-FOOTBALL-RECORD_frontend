@@ -3,6 +3,7 @@ import Footer from "./Footer";
 import TopPage from "./TopPage";
 import Teams from "./Teams";
 import Ranking from "./Ranking";
+import TeamDetailRoot from "./TeamDetailRoot";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 function App() {
   return (
@@ -13,6 +14,7 @@ function App() {
           <Route path="/" element={<TopPage />} />
           <Route path="/teams" element={<Teams />} />
           <Route path="/ranking" element={<Ranking />} />
+          <Route path="/team/:id" element={<TeamDetailRoot />} />
         </Routes>
       </BrowserRouter>
       <Footer />

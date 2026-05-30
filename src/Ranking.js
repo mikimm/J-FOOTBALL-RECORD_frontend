@@ -65,9 +65,39 @@ function Ranking() {
             width: "120%",
           }}
         >
-          <Tab tabClassName="j1_tab" eventKey="98" title="J1 League"></Tab>
-          <Tab tabClassName="j2_tab" eventKey="99" title="J2 League"></Tab>
-          <Tab tabClassName="j3_tab" eventKey="100" title="J3 League"></Tab>
+          <Tab
+            tabClassName="j1_tab"
+            eventKey="98"
+            title={
+              <img
+                className="league-logo"
+                src="images/j1_league.png"
+                width="100"
+              />
+            }
+          ></Tab>
+          <Tab
+            tabClassName="j2_tab"
+            eventKey="99"
+            title={
+              <img
+                className="league-logo"
+                src="images/j2_league.png"
+                width="100"
+              />
+            }
+          ></Tab>
+          <Tab
+            tabClassName="j3_tab"
+            eventKey="100"
+            title={
+              <img
+                className="league-logo"
+                src="images/j3_league.png"
+                width="100"
+              />
+            }
+          ></Tab>
         </Tabs>
         <table className="ranking_table">
           <tr>
