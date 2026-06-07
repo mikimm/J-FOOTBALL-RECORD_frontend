@@ -4,6 +4,7 @@ import Tab from "react-bootstrap/Tab";
 import Tabs from "react-bootstrap/Tabs";
 import PlayersList from "./PlayersList";
 import TeamDetail from "./TeamDetail";
+import BackButton from "./BackButton";
 import "./TeamDetail.css";
 function TeamDetailRoot() {
   const [info, setInfo] = useState([]);
@@ -72,20 +73,26 @@ function TeamDetailRoot() {
             {key === "team" && <TeamDetail info={info} />}
             {key === "player" && <PlayersList players={info.players} />}
           </div>
+          <BackButton />
         </main>
       );
     }
   } else {
     return (
-      <h1
-        style={{
-          textAlign: "center",
-          marginTop: "20%",
-          marginBottom: "30%",
-        }}
-      >
-        Not Found
-      </h1>
+      <main>
+        <div className="team_detail">
+          <h1
+            style={{
+              textAlign: "center",
+              marginTop: "20%",
+              marginBottom: "30%",
+            }}
+          >
+            Not Found
+          </h1>
+          <BackButton />
+        </div>
+      </main>
     );
   }
 }

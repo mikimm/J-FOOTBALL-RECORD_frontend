@@ -39,11 +39,9 @@ function PlayersList({ players }) {
     );
   });
   return (
-    <main>
-      <div className="players">
-        <ListGroup>{player_profile}</ListGroup>
-      </div>
-    </main>
+    <div className="players">
+      <ListGroup>{player_profile}</ListGroup>
+    </div>
   );
 }
 
