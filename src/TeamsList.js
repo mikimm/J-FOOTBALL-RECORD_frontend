@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from "react";
+import { NavLink } from "react-router-dom";
+import Nav from "react-bootstrap/Nav";
 function TeamsList({ leagueNumber }) {
   const [list_info, setInfo] = useState([]);
   const chunkSize = 4;
@@ -41,7 +43,15 @@ function TeamsList({ leagueNumber }) {
               {group.map((team) => (
                 <tr key={team.id}>
                   <td>
-                    <a href={`/team/${team.id}`}>{team.team_name}</a>
+                    <Nav.Link
+                      as={NavLink}
+                      to={`/team/${team.id}`}
+                      style={() => {
+                        return { color: "blue" };
+                      }}
+                    >
+                      {team.team_name}
+                    </Nav.Link>
                   </td>
                   <td>
                     <img src={team.team_logo} alt={team.team_name} />
