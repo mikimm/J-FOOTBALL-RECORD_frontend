@@ -6,17 +6,27 @@ import NavDropdown from "react-bootstrap/NavDropdown";
 import { NavLink } from "react-router-dom";
 import NavbarCollapse from "react-bootstrap/NavbarCollapse";
 import { useState } from "react";
+import Cookies from "universal-cookie";
+const cookies = new Cookies();
 function Header() {
-  const LogoutAction = async () => {
-    console.log("LogoutAction called");
-    try {
-      const response = await fetch("/logout/", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
+  const LogoutAction = (e) => {
+    const token = cookies.get("csrftoken");
+    let target = "/logout/";
+
+    fetch(target, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "X-CSRFToken": token,
+      },
+    })
+      .then((response) => {
+        console.log(response);
+        window.location.href = response.url;
+      })
+      .catch((error) => {
+        console.error(error);
       });
-    } catch (error) {
-      console.error("Error:", error);
-    }
   };
   return (
     <Navbar expand="lg" className="bg-black" data-bs-theme="dark">
