@@ -7,6 +7,17 @@ import { NavLink } from "react-router-dom";
 import NavbarCollapse from "react-bootstrap/NavbarCollapse";
 import { useState } from "react";
 function Header() {
+  const LogoutAction = async () => {
+    console.log("LogoutAction called");
+    try {
+      const response = await fetch("/logout/", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+      });
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  };
   return (
     <Navbar expand="lg" className="bg-black" data-bs-theme="dark">
       <Container>
@@ -55,18 +66,6 @@ function Header() {
             >
               チーム一覧
             </Nav.Link>
-            <Nav.Link
-              as={NavLink}
-              to="/"
-              style={{
-                marginLeft: "5%",
-                color: "white",
-                fontSize: "15px",
-                display: "inline-block",
-              }}
-            >
-              ログアウト
-            </Nav.Link>
             <NavDropdown
               title="mikihiro"
               id="collapsible-nav-dropdown"
@@ -75,7 +74,9 @@ function Header() {
               <NavDropdown.Item href="#action/3.1">
                 プロフィール設定
               </NavDropdown.Item>
-              <NavDropdown.Item href="#action/3.1">ログアウト</NavDropdown.Item>
+              <NavDropdown.Item onClick={LogoutAction}>
+                ログアウト
+              </NavDropdown.Item>
             </NavDropdown>
           </div>
         </Navbar.Collapse>
