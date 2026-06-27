@@ -1,5 +1,4 @@
 import { useParams } from "react-router";
-import React, { useState, useEffect } from "react";
 import "./TeamDetail.css";
 function TeamDetail({ info }) {
   return (
