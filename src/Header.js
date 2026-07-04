@@ -33,17 +33,15 @@ function Header() {
       <Container>
         <Navbar.Brand>J-FOOTBALL-RECORD</Navbar.Brand>
         <Navbar.Toggle aria-controls="responsive-navbar-nav" />
-        <Navbar.Collapse id="responsive-navbar-nav">
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "right",
-              width: "100%",
-            }}
-          >
+        <Navbar.Collapse
+          id="responsive-navbar-nav"
+          className="d-flex justify-content-end"
+        >
+          <Nav className="ms-auto alignment-nav">
             <Nav.Link
               as={NavLink}
               to="/"
+              className="ms-lg-4" // Pサイズlgの時に左にマージンを空ける
               style={{
                 color: "white",
                 fontSize: "15px",
@@ -55,11 +53,10 @@ function Header() {
             <Nav.Link
               as={NavLink}
               to="/ranking"
+              className="ms-lg-4" // Pサイズlgの時に左にマージンを空ける
               style={{
-                marginLeft: "5%",
                 color: "white",
                 fontSize: "15px",
-                display: "inline-block",
               }}
             >
               順位表
@@ -67,11 +64,10 @@ function Header() {
             <Nav.Link
               as={NavLink}
               to="/teams"
+              className="ms-lg-4" // Pサイズlgの時に左にマージンを空ける
               style={{
-                marginLeft: "5%",
                 color: "white",
                 fontSize: "15px",
-                display: "inline-block",
               }}
             >
               チーム一覧
@@ -79,7 +75,8 @@ function Header() {
             <NavDropdown
               title="mikihiro"
               id="collapsible-nav-dropdown"
-              style={{ color: "white", marginLeft: "5%" }}
+              className="ms-lg-4" // Pサイズlgの時に左にマージンを空ける
+              style={{ color: "white" }}
             >
               <NavDropdown.Item href="#action/3.1">
                 プロフィール設定
@@ -88,7 +85,7 @@ function Header() {
                 ログアウト
               </NavDropdown.Item>
             </NavDropdown>
-          </div>
+          </Nav>
         </Navbar.Collapse>
       </Container>
     </Navbar>
