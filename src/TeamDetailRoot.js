@@ -18,10 +18,6 @@ function TeamDetailRoot() {
         credentials: "same-origin",
       })
         .then((response) => {
-          if (response.status === 403) {
-            console.log("login画面へ遷移");
-            window.location.href = "/login/";
-          }
           return response.json();
         })
         .then((result) => {
