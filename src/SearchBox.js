@@ -9,7 +9,7 @@ function SearchBox({ changeTarget }) {
         type="search"
         value={value}
         onChange={(e) => setValue(e.target.value)}
-        placeholder="タイトルを検索してください"
+        placeholder="title"
         style={{
           width: "25%",
           marginLeft: "5%",

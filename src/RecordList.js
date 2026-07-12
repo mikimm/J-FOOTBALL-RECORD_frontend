@@ -64,50 +64,45 @@ function RecordList() {
           records.results.length === 0 ? (
             <h1 style={{ textAlign: "center", marginTop: "20%" }}>Not Found</h1>
           ) : (
-            <table className="record-list">
+            <table
+              className="record-list"
+              style={{ width: "100%", textAlign: "center" }}
+            >
               <thead>
                 <tr className="record-header">
-                  <th>試合</th>
-                  <th>タイトル</th>
-                  <th>試合日</th>
-                  <th>作成者</th>
-                  <th>いいね数</th>
+                  <th>card</th>
+                  <th>result</th>
+                  <th>title</th>
+                  <th>match day</th>
+                  <th>user</th>
+                  <th className="d-none d-lg-block">nice count</th>
                 </tr>
               </thead>
               {records.results.map((record, index) => (
-                <tbody style={{ textAlign: "center" }}>
+                <tbody>
                   <tr key={index} className="record">
                     <td className="match-info">
-                      <div className="home_team">
+                      <div>第{record.round}節</div>
+                      <a className="home_team">
                         <img
                           className="team-logo"
                           src={record.home_team.team_logo}
                         />
-
-                        <div className="home-team-name">
-                          {record.home_team.team_name}
-                          <br></br>(Home)
-                        </div>
-                      </div>
-
-                      <div className="game">
-                        <div className="round">
-                          第{record.round}節<br />
-                          {record.home_score}-{record.away_score}
-                        </div>
-                      </div>
-
-                      <div className="away_team">
+                      </a>
+                      vs
+                      <a className="away_team">
                         <img
                           className="team-logo"
                           src={record.away_team.team_logo}
                         />
-
-                        <div className="away-team-name">
-                          {record.away_team.team_name}
-                          <br></br>(Away)
-                        </div>
-                      </div>
+                      </a>
+                    </td>
+                    <td className="result">
+                      <p className="game">
+                        <p className="round">
+                          {record.home_score}-{record.away_score}
+                        </p>
+                      </p>
                     </td>
                     <td className="title">
                       <p>{record.title}</p>
@@ -118,7 +113,7 @@ function RecordList() {
                     <td className="user-name">
                       <p>{record.user_name}</p>
                     </td>
-                    <td className="nice-count">
+                    <td className="d-none d-lg-table-cell">
                       <p class="fa fa-soccer-ball-o"></p>
                       <p>{record.nice_count}</p>
                     </td>

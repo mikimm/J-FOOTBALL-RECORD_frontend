@@ -1,7 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { NavLink } from "react-router-dom";
 import Nav from "react-bootstrap/Nav";
+import ListGroup from "react-bootstrap/ListGroup";
+import { useNavigate } from "react-router-dom";
 function TeamsList({ leagueNumber }) {
+  const navigate = useNavigate();
   const [list_info, setInfo] = useState([]);
   const chunkSize = 4;
   const groupedTeams = [];
@@ -24,43 +27,49 @@ function TeamsList({ leagueNumber }) {
         });
     }
   }, [leagueNumber]);
-
-  for (let i = 0; i < list_info.length; i += chunkSize) {
-    groupedTeams.push(list_info.slice(i, i + chunkSize));
-  }
+  const team_info = list_info.map((team) => {
+    console.log(team);
+    return (
+      <ListGroup.Item
+        variant="secondary"
+        action
+        style={{
+          textAlign: "center",
+          margin: "auto",
+        }}
+        onClick={() => {
+          navigate(`/team/${team.id}`);
+        }}
+      >
+        <div className="team_profile" id={team.id}>
+          <div>
+            <a>{team.team_name}</a>
+          </div>
+          <div>
+            <a>
+              <img src={team.team_logo} alt={team.team_name} />
+            </a>
+          </div>
+        </div>
+      </ListGroup.Item>
+    );
+  });
   if (list_info.length > 0) {
     return (
       <div className="team_list" style={{ display: "flex", gap: "20px" }}>
-        {groupedTeams.map((group, tableIndex) => (
-          <table key={tableIndex}>
-            <thead>
-              <tr>
-                <th>チーム名</th>
-                <th>エンブレム</th>
-              </tr>
-            </thead>
-            <tbody>
-              {group.map((team) => (
-                <tr key={team.id}>
-                  <td>
-                    <Nav.Link
-                      as={NavLink}
-                      to={`/team/${team.id}`}
-                      style={() => {
-                        return { color: "blue" };
-                      }}
-                    >
-                      {team.team_name}
-                    </Nav.Link>
-                  </td>
-                  <td>
-                    <img src={team.team_logo} alt={team.team_name} />
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        ))}
+        {
+          <ListGroup
+            variant="secondary"
+            action
+            style={{
+              width: "60%",
+              textAlign: "center",
+              margin: "auto",
+            }}
+          >
+            {team_info}
+          </ListGroup>
+        }
       </div>
     );
   }

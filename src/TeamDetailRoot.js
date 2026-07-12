@@ -72,8 +72,8 @@ function TeamDetailRoot() {
             </Tabs>
             {key === "team" && <TeamDetail info={info} />}
             {key === "player" && <PlayersList players={info.players} />}
+            <BackButton />
           </div>
-          <BackButton />
         </main>
       );
     }
@@ -86,6 +86,7 @@ function TeamDetailRoot() {
               textAlign: "center",
               marginTop: "20%",
               marginBottom: "30%",
+              height: "100vh",
             }}
           >
             Not Found

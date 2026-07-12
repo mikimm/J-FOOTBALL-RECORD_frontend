@@ -43,142 +43,134 @@ function Ranking() {
 
   return (
     <main>
-      <div
-        className="team_ranking"
+      <Tabs
+        id="controlled-tab-example"
+        onSelect={(key) => {
+          setKey(key);
+          setTarget(`http://127.0.0.1:8000/api/v1/league/ranking/${key}`);
+        }}
+        className="mb-3"
         style={{
-          position: "absolute",
-          top: "10%",
-          height: "100%",
-          marginLeft: "15%",
+          justifyContent: "center",
+          width: "100%",
+          marginTop: "20px",
         }}
       >
-        <Tabs
-          id="controlled-tab-example"
-          onSelect={(key) => {
-            setKey(key);
-            setTarget(`http://127.0.0.1:8000/api/v1/league/ranking/${key}`);
-          }}
-          className="mb-3"
-          style={{
-            justifyContent: "left",
-            marginTop: "20px",
-            width: "120%",
-          }}
-        >
-          <Tab
-            tabClassName="j1_tab"
-            eventKey="98"
-            title={
-              <img
-                className="league-logo"
-                src="images/j1_league.png"
-                width="100"
-              />
-            }
-          ></Tab>
-          <Tab
-            tabClassName="j2_tab"
-            eventKey="99"
-            title={
-              <img
-                className="league-logo"
-                src="images/j2_league.png"
-                width="100"
-              />
-            }
-          ></Tab>
-          <Tab
-            tabClassName="j3_tab"
-            eventKey="100"
-            title={
-              <img
-                className="league-logo"
-                src="images/j3_league.png"
-                width="100"
-              />
-            }
-          ></Tab>
-        </Tabs>
-        <table className="ranking_table">
-          <tr>
-            <th className="ranking_th">
-              <div>順位 </div>
-              <i
-                class="bi bi-arrow-down-up"
-                onClick={() => {
-                  sortClick("rank");
-                }}
-              ></i>
-            </th>
-            <th className="ranking_th">
-              <div>チーム </div>
-            </th>
-            <th className="ranking_th">
-              <div>勝ち点 </div>
-              <i
-                class="bi bi-arrow-down-up"
-                onClick={() => {
-                  sortClick("points");
-                }}
-              ></i>
-            </th>
-            <th className="ranking_th">
-              <div>勝ち </div>
-              <i
-                class="bi bi-arrow-down-up"
-                onClick={() => {
-                  sortClick("all.win");
-                }}
-              ></i>
-            </th>
-            <th className="ranking_th">
-              <div>引き分け </div>
-              <i
-                class="bi bi-arrow-down-up"
-                onClick={() => {
-                  sortClick("all.draw");
-                }}
-              ></i>
-            </th>
-            <th className="ranking_th">
-              <div>負け </div>
-              <i
-                class="bi bi-arrow-down-up"
-                onClick={() => {
-                  sortClick("all.lose");
-                }}
-              ></i>
-            </th>
-            <th className="ranking_th">
-              <div>得失点差 </div>
-              <i
-                class="bi bi-arrow-down-up"
-                onClick={() => {
-                  sortClick("goalsDiff");
-                }}
-              ></i>
-            </th>
-            <th className="ranking_th">
-              <div>得点数 </div>
-              <i
-                class="bi bi-arrow-down-up"
-                onClick={() => {
-                  sortClick("all.goals.score");
-                }}
-              ></i>
-            </th>
-            <th className="ranking_th">
-              <div>失点数 </div>
-              <i
-                class="bi bi-arrow-down-up"
-                onClick={() => {
-                  sortClick("all.goals.against");
-                }}
-              ></i>
-            </th>
-          </tr>
-          {ranking && ranking.length > 0 ? (
-            ranking.map((rank, index) => (
+        <Tab
+          tabClassName="j1_tab"
+          eventKey="98"
+          title={
+            <img
+              className="league-logo"
+              src="images/j1_league.png"
+              width="100"
+            />
+          }
+        ></Tab>
+        <Tab
+          tabClassName="j2_tab"
+          eventKey="99"
+          title={
+            <img
+              className="league-logo"
+              src="images/j2_league.png"
+              width="100"
+            />
+          }
+        ></Tab>
+        <Tab
+          tabClassName="j3_tab"
+          eventKey="100"
+          title={
+            <img
+              className="league-logo"
+              src="images/j3_league.png"
+              width="100"
+            />
+          }
+        ></Tab>
+      </Tabs>
+      <table className="ranking_table">
+        {ranking && ranking.length > 0 ? (
+          ranking.map((rank, index) => (
+            <>
+              <tr>
+                <th className="ranking_th">
+                  <div>順位 </div>
+                  <i
+                    class="bi bi-arrow-down-up"
+                    onClick={() => {
+                      sortClick("rank");
+                    }}
+                  ></i>
+                </th>
+                <th className="ranking_th" style={{ width: "4%" }}>
+                  <div>チーム</div>
+                </th>
+                <th className="ranking_th">
+                  <div>勝ち点 </div>
+                  <i
+                    class="bi bi-arrow-down-up"
+                    onClick={() => {
+                      sortClick("points");
+                    }}
+                  ></i>
+                </th>
+                <th className="ranking_th">
+                  <div>勝ち </div>
+                  <i
+                    class="bi bi-arrow-down-up"
+                    onClick={() => {
+                      sortClick("all.win");
+                    }}
+                  ></i>
+                </th>
+                <th className="ranking_th">
+                  <div>引き分け </div>
+                  <i
+                    class="bi bi-arrow-down-up"
+                    onClick={() => {
+                      sortClick("all.draw");
+                    }}
+                  ></i>
+                </th>
+                <th className="ranking_th">
+                  <div>負け </div>
+                  <i
+                    class="bi bi-arrow-down-up"
+                    onClick={() => {
+                      sortClick("all.lose");
+                    }}
+                  ></i>
+                </th>
+                <th className="ranking_th">
+                  <div>得失点差 </div>
+                  <i
+                    class="bi bi-arrow-down-up"
+                    onClick={() => {
+                      sortClick("goalsDiff");
+                    }}
+                  ></i>
+                </th>
+                <th className="ranking_th">
+                  <div>得点数 </div>
+                  <i
+                    class="bi bi-arrow-down-up"
+                    onClick={() => {
+                      sortClick("all.goals.score");
+                    }}
+                  ></i>
+                </th>
+                <th className="ranking_th">
+                  <div>失点数 </div>
+                  <i
+                    class="bi bi-arrow-down-up"
+                    onClick={() => {
+                      sortClick("all.goals.against");
+                    }}
+                  ></i>
+                </th>
+              </tr>
               <tr>
                 <td className="ranking_td" index={index}>
                   {rank.rank}
@@ -189,7 +181,6 @@ function Ranking() {
                   style={{ textAlign: "left" }}
                 >
                   <img className="logo-picture" src={rank.team.image} />
-                  <span className="team-name">{rank.team.name}</span>
                 </td>
                 <td className="ranking_td" index={index}>
                   {rank.points}
@@ -213,14 +204,14 @@ function Ranking() {
                   {rank.all.goals.against}
                 </td>
               </tr>
-            ))
-          ) : (
-            <tr>
-              <td colSpan="9">Loading...</td>
-            </tr>
-          )}
-        </table>
-      </div>
+            </>
+          ))
+        ) : (
+          <tr>
+            <td colSpan="9">Loading...</td>
+          </tr>
+        )}
+      </table>
     </main>
   );
 }

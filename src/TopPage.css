@@ -2,13 +2,9 @@
 body{
     margin: auto;
 }
-main{
-    height: 850px;
-}
 .content-list{
     background-color: #F5F5F5;
-    width: 80%; 
-    height: 100%;
+    width: 95%; 
     margin-top: 2%;
     margin-left: auto;
     margin-right: auto;
@@ -26,6 +22,7 @@ main{
 .record-list{
   border-collapse: separate;
   border-spacing: 20px 30px;
+  height: 70vh;
 }
 .team-logo{
     text-align: center;
@@ -33,37 +30,19 @@ main{
 .pagination_box{
     text-align: center;
     background-color: #ffffff;
-    width: 10%;
+    width: 150px;
     margin-left: auto;
     margin-right: auto;
     border-radius: 30px;
     margin-top: 30px;
 }
 .match-info{
-    display: flex;
     align-items: center;
     justify-content: center;
-    width: 500px;
-    margin-left: 100px;
-}
-.record-header{
-    text-align: center;
 }
 .home_team{
     width: 150px;
 }
 .away_team{
     width: 150px;
-}
-.title{
-   text-align: left;
-}
-.user-name{
-    text-align: left;
-}
-.match-day{
-    text-align: left;
-}
-main {
-    height: 950px;
 }

@@ -2,29 +2,29 @@ import { useParams } from "react-router";
 import "./TeamDetail.css";
 function TeamDetail({ info }) {
   return (
-    <div className="content-list">
-      <div className="team_images">
+    <div className="col-11 col-lg-6 content-list" style={{paddingBottom: "2%" }}>
+      <div className="team_info" style={{ marginLeft: "10%" }}>
         <img
           src={info.team.logo}
           alt={info.team.name}
           width="250"
           height="auto"
-          style={{ marginRight: "150px" }}
         />
         <img
           src={info.venue.image}
           alt={info.venue.name}
-          width="400"
+          width="300"
           height="auto"
-          style={{ marginLeft: "50px" }}
         />
-      </div>
-      <div className="team_info" style={{ marginLeft: "200px" }}>
-        <p>チーム名: {info.team.name}</p>
-        <p>発足年: {info.team.founded}年</p>
-        <p>ホームスタジアム: {info.venue.name}</p>
-        <p>ホームタウン: {info.venue.city}</p>
-        <p>ホームスタジアムの収容人数: {info.venue.capacity}人</p>
+        <div className="team_info_text" style={{ display: "inline" }}>
+          <p style={{ fontWeight: "bold" }}>TEAM: {info.team.name}</p>
+          <p style={{ fontWeight: "bold" }}>FOUNDED: {info.team.founded}年</p>
+          <p style={{ fontWeight: "bold" }}>HOMESTADIUM: {info.venue.name}</p>
+          <p style={{ fontWeight: "bold" }}>HOMETOWN: {info.venue.city}</p>
+          <p style={{ fontWeight: "bold" }}>
+            HOME STADIUM CAPACITY: {info.venue.capacity}人
+          </p>
+        </div>
       </div>
     </div>
   );

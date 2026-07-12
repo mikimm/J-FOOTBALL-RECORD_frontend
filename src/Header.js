@@ -30,13 +30,10 @@ function Header() {
   };
   return (
     <Navbar expand="lg" className="bg-black" data-bs-theme="dark">
-      <Container>
+      <Container style={{ padding: "0%" }}>
         <Navbar.Brand>J-FOOTBALL-RECORD</Navbar.Brand>
         <Navbar.Toggle aria-controls="responsive-navbar-nav" />
-        <Navbar.Collapse
-          id="responsive-navbar-nav"
-          className="d-flex justify-content-end"
-        >
+        <Navbar.Collapse id="responsive-navbar-nav">
           <Nav className="ms-auto alignment-nav">
             <Nav.Link
               as={NavLink}
@@ -45,7 +42,6 @@ function Header() {
               style={{
                 color: "white",
                 fontSize: "15px",
-                display: "inline-block",
               }}
             >
               投稿一覧
@@ -75,13 +71,19 @@ function Header() {
             <NavDropdown
               title="mikihiro"
               id="collapsible-nav-dropdown"
-              className="ms-lg-4" // Pサイズlgの時に左にマージンを空ける
-              style={{ color: "white" }}
+              className="ms-lg-4"
+              style={{ fontcolor: "white", width: "100px" }}
             >
-              <NavDropdown.Item href="#action/3.1">
+              <NavDropdown.Item
+                href="#action/3.1"
+                style={{ fontcolor: "white" }}
+              >
                 プロフィール設定
               </NavDropdown.Item>
-              <NavDropdown.Item onClick={LogoutAction}>
+              <NavDropdown.Item
+                onClick={LogoutAction}
+                style={{ fontcolor: "white" }}
+              >
                 ログアウト
               </NavDropdown.Item>
             </NavDropdown>

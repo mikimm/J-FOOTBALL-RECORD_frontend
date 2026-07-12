@@ -7,7 +7,8 @@ const BackButton = () => {
       class="return_button"
       style={{
         textAlign: "center",
-        marginTop: "20px",
+        marginTop: "5%",
+        marginBottom: "5%",
         fontSize: "20px",
       }}
     >
