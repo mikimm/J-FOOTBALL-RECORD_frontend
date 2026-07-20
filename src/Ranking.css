@@ -4,11 +4,12 @@
   width: 5%;
 }
 .ranking_td {
-  background-color: rgb(232, 227, 227);
   font-weight: normal;
   font-size: 20px;
 }
-
+.ranking_tr{
+  background-color: rgb(232, 227, 227);
+}
 .ranking_table{
   width: 100%;
   text-align: center;

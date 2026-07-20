@@ -7,6 +7,7 @@ import TeamDetailRoot from "./TeamDetailRoot";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { useEffect } from "react";
 import ProtectedRoute from "./ProtectedRoute";
+import Register from "./Register";
 function App() {
   return (
     <div className="App">
@@ -18,6 +19,7 @@ function App() {
             <Route path="/teams" element={<Teams />} />
             <Route path="/ranking" element={<Ranking />} />
             <Route path="/team/:id" element={<TeamDetailRoot />} />
+            <Route path="/register" element={<Register />} />
           </Route>
         </Routes>
       </BrowserRouter>

@@ -41,6 +41,14 @@ function Ranking() {
     }
   };
 
+  const display = (index) => {
+    if (index === 0) {
+      return "table-row";
+    } else {
+      return "none";
+    }
+  };
+
   return (
     <main>
       <Tabs
@@ -63,7 +71,7 @@ function Ranking() {
             <img
               className="league-logo"
               src="images/j1_league.png"
-              width="100"
+              width="70"
             />
           }
         ></Tab>
@@ -74,7 +82,7 @@ function Ranking() {
             <img
               className="league-logo"
               src="images/j2_league.png"
-              width="100"
+              width="70"
             />
           }
         ></Tab>
@@ -85,7 +93,7 @@ function Ranking() {
             <img
               className="league-logo"
               src="images/j3_league.png"
-              width="100"
+              width="70"
             />
           }
         ></Tab>
@@ -94,7 +102,7 @@ function Ranking() {
         {ranking && ranking.length > 0 ? (
           ranking.map((rank, index) => (
             <>
-              <tr>
+              <tr className="sticky-top" style={{ display: display(index) }}>
                 <th className="ranking_th">
                   <div>順位 </div>
                   <i
@@ -171,7 +179,7 @@ function Ranking() {
                   ></i>
                 </th>
               </tr>
-              <tr>
+              <tr className="ranking_tr">
                 <td className="ranking_td" index={index}>
                   {rank.rank}
                 </td>

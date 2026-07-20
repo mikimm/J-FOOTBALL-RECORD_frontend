@@ -26,7 +26,7 @@ function Teams() {
               <img
                 className="league-logo"
                 src="images/j1_league.png"
-                width="100"
+                width="70"
               />
             }
           >
@@ -39,7 +39,7 @@ function Teams() {
               <img
                 className="league-logo"
                 src="images/j2_league.png"
-                width="100"
+                width="70"
               />
             }
           >
@@ -52,7 +52,7 @@ function Teams() {
               <img
                 className="league-logo"
                 src="images/j3_league.png"
-                width="100"
+                width="70"
               />
             }
           >

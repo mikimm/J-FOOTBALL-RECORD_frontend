@@ -3,11 +3,16 @@ import SearchBox from "./SearchBox";
 import "./TopPage.css";
 import Button from "react-bootstrap/Button";
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 function RecordList() {
   const [records, setRecords] = useState([]);
+  const [order, setOrder] = useState("up");
+  const recordSelect = document.getElementById("record-select");
+  const [mine, setMine] = useState(false);
   const [target, setTarget] = useState(
-    "http://127.0.0.1:8000/api/v1/records/list?ordering=-id",
+    `http://127.0.0.1:8000/api/v1/records/list?ordering=-id&mine=${mine}`,
   );
+  const navigate = useNavigate();
   useEffect(() => {
     fetch(target, {
       credentials: "same-origin",
@@ -24,7 +29,23 @@ function RecordList() {
         console.error(error);
       });
   }, [target]);
-  const [order, setOrder] = useState("up");
+  if (recordSelect) {
+    recordSelect.addEventListener("change", function () {
+      if (this.value === "mine") {
+        setMine(true);
+        setTarget(
+          (mine) =>
+            `http://127.0.0.1:8000/api/v1/records/list?ordering=-id&mine=${mine}`,
+        );
+      } else {
+        setMine(false);
+        setTarget(
+          (mine) =>
+            `http://127.0.0.1:8000/api/v1/records/list?ordering=-id&mine=${mine}`,
+        );
+      }
+    });
+  }
   return (
     <main>
       <div className="content-list">
@@ -44,29 +65,45 @@ function RecordList() {
           onClick={() => {
             if (
               target ===
-              "http://127.0.0.1:8000/api/v1/records/list?ordering=-id"
+              `http://127.0.0.1:8000/api/v1/records/list?ordering=-id&mine=${mine}`
             ) {
               setOrder(order === "up" ? "down" : "up");
               setTarget(
-                "http://127.0.0.1:8000/api/v1/records/list?ordering=id",
+                `http://127.0.0.1:8000/api/v1/records/list?ordering=id&mine=${mine}`,
               );
             } else {
               setOrder(order === "up" ? "down" : "up");
               setTarget(
-                "http://127.0.0.1:8000/api/v1/records/list?ordering=-id",
+                `http://127.0.0.1:8000/api/v1/records/list?ordering=-id&mine=${mine}`,
               );
             }
           }}
         >
           <i class={`bi bi-arrow-${order}-square-fill`}></i>
         </Button>
+        <select id="record-select" defaultValue="all">
+          <option value="all">投稿一覧</option>
+          <option value="mine">My投稿</option>
+        </select>
+        <div
+          className="record-register"
+          style={{
+            textAlign: "center",
+            marginTop: "20px",
+            display: mine ? "block" : "none",
+          }}
+        >
+          <Button variant="primary" onClick={() => navigate(`/register`)}>
+            POST
+          </Button>
+        </div>
         {records.results ? (
           records.results.length === 0 ? (
             <h1 style={{ textAlign: "center", marginTop: "20%" }}>Not Found</h1>
           ) : (
             <table
               className="record-list"
-              style={{ width: "100%", textAlign: "center" }}
+              style={{ textAlign: "center", width: "100%" }}
             >
               <thead>
                 <tr className="record-header">
@@ -74,7 +111,12 @@ function RecordList() {
                   <th>result</th>
                   <th>title</th>
                   <th>match day</th>
-                  <th>user</th>
+                  <th style={{ display: mine ? "none" : "table-cell" }}>
+                    user
+                  </th>
+                  <th style={{ display: mine ? "table-cell" : "none" }}>
+                    action
+                  </th>
                   <th className="d-none d-lg-block">nice count</th>
                 </tr>
               </thead>
@@ -110,8 +152,26 @@ function RecordList() {
                     <td className="match-day">
                       <p className="record-match-day">{record.match_day}</p>
                     </td>
-                    <td className="user-name">
+                    <td
+                      className="user-name"
+                      style={{ display: mine ? "none" : "table-cell" }}
+                    >
                       <p>{record.user_name}</p>
+                    </td>
+                    <td
+                      className="action"
+                      style={{ display: mine ? "table-cell" : "none" }}
+                    >
+                      <Button
+                        variant="outline-success"
+                        style={{ fontSize: 10 }}
+                      >
+                        EDIT
+                      </Button>
+                      <div>or</div>
+                      <Button variant="outline-danger" style={{ fontSize: 10 }}>
+                        DELETE
+                      </Button>
                     </td>
                     <td className="d-none d-lg-table-cell">
                       <p class="fa fa-soccer-ball-o"></p>

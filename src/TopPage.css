@@ -9,7 +9,7 @@ body{
     margin-left: auto;
     margin-right: auto;
     border-radius: 30px;
-    padding-top: 30px;    
+    padding-top: 30px;  
 }
 .team-logo{
     width: 50px;
@@ -21,7 +21,7 @@ body{
 }
 .record-list{
   border-collapse: separate;
-  border-spacing: 20px 30px;
+  border-spacing: 15px;
   height: 70vh;
 }
 .team-logo{
