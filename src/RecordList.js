@@ -163,13 +163,13 @@ function RecordList() {
                       style={{ display: mine ? "table-cell" : "none" }}
                     >
                       <Button
-                        variant="outline-success"
-                        style={{ fontSize: 10 }}
+                        variant="info"
+                        style={{ fontSize: 10, color: "white" }}
                       >
-                        EDIT
+                        REPOST
                       </Button>
                       <div>or</div>
-                      <Button variant="outline-danger" style={{ fontSize: 10 }}>
+                      <Button variant="danger" style={{ fontSize: 10 }}>
                         DELETE
                       </Button>
                     </td>

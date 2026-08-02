@@ -4,6 +4,7 @@ import Form from "react-bootstrap/Form";
 import { useState, useEffect } from "react";
 import Modal from "react-bootstrap/Modal";
 import { useNavigate } from "react-router-dom";
+import "./Register.css";
 function Register() {
   const [RecordCount, setRecordCount] = useState(0);
   const [TitleCount, setTitleCount] = useState(0);
@@ -12,9 +13,10 @@ function Register() {
   const [AwayId, setAwayId] = useState(0);
   const [show, setShow] = useState(false);
   const [disabled, setdisabled] = useState(true);
-  const handleShow = () => {
-    setShow(true);
-  };
+  const [target_file, setFile] = useState(null);
+  const [main_file, setMain] = useState(false);
+  const handleShow = () => setShow(true);
+  const handleClose = () => setShow(false);
   const navigate = useNavigate();
   const onRecordChange = (event) => {
     setRecordCount(event.target.value.length);
@@ -45,18 +47,22 @@ function Register() {
   };
   const changeFile = (event) => {
     const file = event.target.files?.[0];
-    console.log(file);
     if (file) {
       setFile(URL.createObjectURL(file));
     }
   };
-  const [target_file, setFile] = useState(null);
+  const deleteFile = () => {
+    setFile(null);
+    setShow(false);
+  };
+  const saveFile = () => {
+    setMain(target_file);
+    setShow(false);
+  };
   useEffect(() => {
     if (RecordCount && TitleCount && RoundCount && HomeId && AwayId) {
-      console.log("ボタンを活性化");
       setdisabled(false);
     } else {
-      console.log("ボタンを非活性");
       setdisabled(true);
     }
   }, [RecordCount, TitleCount, RoundCount, HomeId, AwayId]);
@@ -73,7 +79,7 @@ function Register() {
             textAlign: "center",
             width: "100%",
             marginBottom: "5%",
-            height: "70vh",
+            height: "125vh",
           }}
         >
           <div>
@@ -291,7 +297,7 @@ function Register() {
               </select>
             </div>
           </div>
-          <div style={{ marginTop: "20px" }}>
+          <div style={{ marginTop: "20px", marginBottom: "20px" }}>
             <label>Record</label>
             <div>
               <Form.Control
@@ -303,17 +309,32 @@ function Register() {
               {RecordCount}/1000
             </div>
           </div>
-          <Button
-            onClick={handleShow}
-            disabled={disabled}
-            style={{ marginTop: "10px" }}
+          <div
+            className="image-area"
+            style={{
+              backgroundColor: "white",
+              width: "80%",
+              margin: "auto",
+              border: "3px dotted #000",
+            }}
           >
-            投稿
+            <label>Image</label>
+            <div onClick={handleShow} style={{ cursor: "pointer" }}>
+              Click This Area to Show Modal
+              <br />
+              your image will be displayed here
+              <div>
+                <img src={main_file} className="img-field" />
+              </div>
+            </div>
+          </div>
+          <Button disabled={disabled} class="m-3 btn btn-primary">
+            Post
           </Button>
         </div>
       </div>
-      <Modal show={show} centered={true}>
-        <Modal.Header>
+      <Modal show={show} centered={true} onHide={handleClose}>
+        <Modal.Header onHide={handleClose} closeButton>
           <Modal.Title>画像投稿</Modal.Title>
         </Modal.Header>
         <Modal.Body>
@@ -332,10 +353,10 @@ function Register() {
           </Form>
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="secondary" onClick={() => navigate(`/`)}>
-            Skip
+          <Button variant="danger" onClick={deleteFile}>
+            Delete Image
           </Button>
-          <Button variant="primary" onClick={() => navigate(`/`)}>
+          <Button variant="primary" onClick={saveFile}>
             Save Image
           </Button>
         </Modal.Footer>
