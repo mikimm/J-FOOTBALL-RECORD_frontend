@@ -131,7 +131,7 @@ function RecordList() {
                           src={record.home_team.team_logo}
                         />
                       </a>
-                      vs
+                      <div>vs</div>
                       <a className="away_team">
                         <img
                           className="team-logo"
@@ -166,7 +166,7 @@ function RecordList() {
                         variant="info"
                         style={{ fontSize: 10, color: "white" }}
                       >
-                        REPOST
+                        REVISE
                       </Button>
                       <div>or</div>
                       <Button variant="danger" style={{ fontSize: 10 }}>
