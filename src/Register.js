@@ -1,11 +1,12 @@
 import { Button } from "react-bootstrap";
 import { useParams } from "react-router";
-import Form from "react-bootstrap/Form";
-import { useCallback, useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import Modal from "react-bootstrap/Modal";
 import { useNavigate } from "react-router-dom";
 import "./Register.css";
 import { useDropzone } from "react-dropzone";
+import PictureModal from "./PictureModal";
+import Form from "react-bootstrap/Form";
 function Register() {
   const [Record, setRecord] = useState("");
   const [Title, setTitle] = useState("");
@@ -14,17 +15,15 @@ function Register() {
   const [AwayId, setAwayId] = useState(0);
   const [HomeScore, setHomeScore] = useState(0);
   const [AwayScore, setAwayScore] = useState(0);
-  const [show, setShow] = useState(false);
   const [Postdisabled, setPostdisabled] = useState(true);
-  const [SaveImagedisabled, setSaveImagdisabled] = useState(true);
-  const [target_file, setTargetFile] = useState(null);
-  const [file, setFile] = useState(null);
-  const handleShow = () => setShow(true);
-  const handleClose = () => setShow(false);
-  const navigate = useNavigate();
+  const [register_file, setRegisterFile] = useState(null);
   const [target, setTarget] = useState(
     `http://127.0.0.1:8000/api/v1/completed_records/`,
   );
+  const [show, setShow] = useState(false);
+  const [file, setFile] = useState(null);
+  const navigate = useNavigate();
+  const handleShow = () => setShow(true);
   const onRecordChange = (event) => {
     setRecord(event.target.value);
   };
@@ -58,15 +57,7 @@ function Register() {
   const onAwayScore = (event) => {
     setAwayScore(event.target.value);
   };
-  const deleteFile = () => {
-    setFile(null);
-    setTargetFile(null);
-    setShow(false);
-    setSaveImagdisabled(true);
-  };
-  const saveFile = () => {
-    setShow(false);
-  };
+
   const PostRecord = async () => {
     const formData = new FormData();
     const d = {
@@ -223,17 +214,6 @@ function Register() {
       </>
     );
   };
-
-  const { acceptedFiles, getRootProps, getInputProps } = useDropzone();
-  useEffect(() => {
-    if (acceptedFiles) {
-      acceptedFiles.map((file) => {
-        setFile(file);
-        setTargetFile(URL.createObjectURL(file));
-        setSaveImagdisabled(false);
-      });
-    }
-  }, [acceptedFiles]);
   return (
     <main>
       <div className="content-list">
@@ -242,12 +222,12 @@ function Register() {
           href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
         ></link>
         <div
-          className="record-list"
-          class="max-vh-200"
+          className="max-vh-200"
           style={{
             textAlign: "center",
             width: "100%",
             marginBottom: "5%",
+            maxHeight: "200vh",
           }}
         >
           <div>
@@ -317,51 +297,29 @@ function Register() {
               <br />
               your image will be displayed here
               <div>
-                <img src={target_file} className="img-field" />
+                {register_file && (
+                  <img src={register_file.preview} className="img-field" />
+                )}
               </div>
             </div>
           </div>
           <Button
             disabled={Postdisabled}
             onClick={PostRecord}
-            class="m-3 btn btn-primary"
+            className="m-3 btn btn-primary"
           >
             Post
           </Button>
         </div>
       </div>
-      <Modal show={show} centered={true} onHide={handleClose}>
-        <Modal.Header onHide={handleClose} closeButton>
-          <Modal.Title>画像投稿</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <Form>
-            <Form.Group
-              className="mb-3"
-              {...getRootProps({ className: "dropzone" })}
-            >
-              <input {...getInputProps()} />
-              <Form.Label>
-                drop some files here ,or click to select files
-              </Form.Label>
-              {file && <div>選択中のファイル：{file.name}</div>}
-              <img width="100%" src={target_file} />
-            </Form.Group>
-          </Form>
-        </Modal.Body>
-        <Modal.Footer>
-          <Button variant="danger" onClick={deleteFile}>
-            Delete Image
-          </Button>
-          <Button
-            variant="primary"
-            onClick={saveFile}
-            disabled={SaveImagedisabled}
-          >
-            Save Image
-          </Button>
-        </Modal.Footer>
-      </Modal>
+      <PictureModal
+        show={show}
+        setShow={setShow}
+        file={file}
+        setFile={setFile}
+        registerFile={register_file}
+        setRegisterFile={setRegisterFile}
+      />
     </main>
   );
 }

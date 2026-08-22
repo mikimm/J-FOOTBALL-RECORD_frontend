@@ -42,7 +42,6 @@ const ProtectedRoute = () => {
     };
   }, [navigate]);
 
-  console.log("protected route");
   // 🔄 Djangoからの返答を待っている間は、ローディング画面（または何も表示しない）にする
   // これにより、ログイン前の古いキャッシュ画面が一瞬見えるのを完全に防ぎます
   if (isAuthenticated === null) {
