@@ -1,10 +1,11 @@
 import { Button } from "react-bootstrap";
 import { useParams } from "react-router";
 import Form from "react-bootstrap/Form";
-import { useState, useEffect } from "react";
+import { useCallback, useState, useEffect } from "react";
 import Modal from "react-bootstrap/Modal";
 import { useNavigate } from "react-router-dom";
 import "./Register.css";
+import { useDropzone } from "react-dropzone";
 function Register() {
   const [Record, setRecord] = useState("");
   const [Title, setTitle] = useState("");
@@ -56,14 +57,6 @@ function Register() {
   };
   const onAwayScore = (event) => {
     setAwayScore(event.target.value);
-  };
-  const changeFile = (event) => {
-    const file = event.target.files?.[0];
-    if (file) {
-      setFile(file);
-      setTargetFile(URL.createObjectURL(file));
-      setSaveImagdisabled(false);
-    }
   };
   const deleteFile = () => {
     setFile(null);
@@ -230,6 +223,17 @@ function Register() {
       </>
     );
   };
+
+  const { acceptedFiles, getRootProps, getInputProps } = useDropzone();
+  useEffect(() => {
+    if (acceptedFiles) {
+      acceptedFiles.map((file) => {
+        setFile(file);
+        setTargetFile(URL.createObjectURL(file));
+        setSaveImagdisabled(false);
+      });
+    }
+  }, [acceptedFiles]);
   return (
     <main>
       <div className="content-list">
@@ -332,15 +336,14 @@ function Register() {
         </Modal.Header>
         <Modal.Body>
           <Form>
-            <Form.Group className="mb-3" controlId="file">
+            <Form.Group
+              className="mb-3"
+              {...getRootProps({ className: "dropzone" })}
+            >
+              <input {...getInputProps()} />
               <Form.Label>
                 drop some files here ,or click to select files
               </Form.Label>
-              <Form.Control
-                type="file"
-                onChange={changeFile}
-                style={{ display: "none" }}
-              />
               {file && <div>選択中のファイル：{file.name}</div>}
               <img width="100%" src={target_file} />
             </Form.Group>
