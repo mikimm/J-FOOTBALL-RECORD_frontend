@@ -7,6 +7,7 @@ import "./Register.css";
 import { useDropzone } from "react-dropzone";
 import PictureModal from "./PictureModal";
 import Form from "react-bootstrap/Form";
+import MatchModal from "./MatchModal";
 function Register() {
   const [Record, setRecord] = useState("");
   const [Title, setTitle] = useState("");
@@ -20,10 +21,16 @@ function Register() {
   const [target, setTarget] = useState(
     `http://127.0.0.1:8000/api/v1/completed_records/`,
   );
-  const [show, setShow] = useState(false);
+  const [showPicture, setShowPicture] = useState(false);
+  const [showMatch, setShowMatch] = useState(false);
   const [file, setFile] = useState(null);
   const navigate = useNavigate();
-  const handleShow = () => setShow(true);
+  const handlePicutureShow = () => {
+    setShowPicture(true);
+  };
+  const handleMatchShow = () => {
+    setShowMatch(true);
+  };
   const onRecordChange = (event) => {
     setRecord(event.target.value);
   };
@@ -69,7 +76,6 @@ function Register() {
       away_score: AwayScore,
       match_day: "2024-12-20",
       round: RoundCount,
-      caption: "hello",
     };
     for (const [k, v] of Object.entries(d)) {
       formData.append(k, v);
@@ -231,6 +237,11 @@ function Register() {
           }}
         >
           <div>
+            <div>
+              <Button variant="outline-primary" onClick={handleMatchShow}>
+                Search Match
+              </Button>
+            </div>
             <label>Title</label>
             <div>
               <input onChange={onTitleChange} maxLength="20"></input>
@@ -292,7 +303,7 @@ function Register() {
             }}
           >
             <label>Image</label>
-            <div onClick={handleShow} style={{ cursor: "pointer" }}>
+            <div onClick={handlePicutureShow} style={{ cursor: "pointer" }}>
               Click This Area to Show Modal
               <br />
               your image will be displayed here
@@ -313,12 +324,17 @@ function Register() {
         </div>
       </div>
       <PictureModal
-        show={show}
-        setShow={setShow}
+        showPicture={showPicture}
+        setShowPicture={setShowPicture}
         file={file}
         setFile={setFile}
         registerFile={register_file}
         setRegisterFile={setRegisterFile}
+      />
+      <MatchModal
+        showMatch={showMatch}
+        setShowMatch={setShowMatch}
+        teamOptions={teamOptions}
       />
     </main>
   );

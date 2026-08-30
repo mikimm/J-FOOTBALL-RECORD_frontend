@@ -6,7 +6,6 @@ import { useNavigate } from "react-router-dom";
 function TeamsList({ leagueNumber }) {
   const navigate = useNavigate();
   const [list_info, setInfo] = useState([]);
-  const chunkSize = 4;
   const groupedTeams = [];
   useEffect(() => {
     if (leagueNumber) {
@@ -28,7 +27,6 @@ function TeamsList({ leagueNumber }) {
     }
   }, [leagueNumber]);
   const team_info = list_info.map((team) => {
-    console.log(team);
     return (
       <ListGroup.Item
         variant="secondary"

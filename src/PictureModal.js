@@ -4,8 +4,8 @@ import { useDropzone } from "react-dropzone";
 import Form from "react-bootstrap/Form";
 import { Button } from "react-bootstrap";
 function PictureModal({
-  show,
-  setShow,
+  showPicture,
+  setShowPicture,
   file,
   setFile,
   registerFile,
@@ -15,18 +15,18 @@ function PictureModal({
   const [SaveImagedisabled, setSaveImagdisabled] = useState(true);
   const [target_file, setTargetFile] = useState(null);
   const handleClose = () => {
-    setShow(false);
+    setShowPicture(false);
     setTargetFile(registerFile);
   };
   const saveFile = (target_file) => {
-    setShow(false);
+    setShowPicture(false);
     setRegisterFile(target_file);
   };
   const deleteFile = () => {
     setFile(null);
     setTargetFile(null);
     setRegisterFile(null);
-    setShow(false);
+    setShowPicture(false);
     setSaveImagdisabled(true);
   };
   useEffect(() => {
@@ -39,7 +39,7 @@ function PictureModal({
     }
   }, [acceptedFiles]);
   return (
-    <Modal show={show} centered={true} onHide={handleClose}>
+    <Modal show={showPicture} centered={true} onHide={handleClose}>
       <Modal.Header onHide={handleClose} closeButton>
         <Modal.Title>画像投稿</Modal.Title>
       </Modal.Header>
