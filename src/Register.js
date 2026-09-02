@@ -42,25 +42,13 @@ function Register() {
     setTitle(event.target.value);
   };
   const onRoundCount = (event) => {
-    if (event.target.value === "default") {
-      setRoundCount("default");
-    } else {
-      setRoundCount(parseInt(event.target.value, 10));
-    }
+    setRoundCount(parseInt(event.target.value, 10));
   };
   const onHomeId = (event) => {
-    if (event.target.value === "default") {
-      setHomeId("default");
-    } else {
-      setHomeId(parseInt(event.target.value, 10));
-    }
+    setHomeId(parseInt(event.target.value, 10));
   };
   const onAwayId = (event) => {
-    if (event.target.value === "default") {
-      setAwayId("default");
-    } else {
-      setAwayId(parseInt(event.target.value, 10));
-    }
+    setAwayId(parseInt(event.target.value, 10));
   };
   const onHomeScore = (event) => {
     setHomeScore(event.target.value);
@@ -70,6 +58,9 @@ function Register() {
   };
 
   const formatDay = (day) => {
+    if (typeof day == "string") {
+      return day;
+    }
     const formattedDay = day.toISOString().split("T")[0];
     return formattedDay;
   };
@@ -275,8 +266,11 @@ function Register() {
           <div>
             <label>Round</label>
             <div>
-              <select className="w-5" onChange={onRoundCount}>
-                <option value="default">--</option>
+              <select
+                value={RoundCount}
+                className="w-5"
+                onChange={onRoundCount}
+              >
                 {roundOptions()}
               </select>
             </div>
@@ -284,15 +278,13 @@ function Register() {
           <div>
             <label>Card</label>
             <div>
-              <select onChange={onHomeId}>
-                <option value="default">--HomeTeamを選択してください--</option>
+              <select value={HomeId} onChange={onHomeId}>
                 {teamOptions()}
               </select>
             </div>
             VS
             <div>
-              <select onChange={onAwayId}>
-                <option value="default">--AwayTeamを選択してください--</option>
+              <select value={AwayId} onChange={onAwayId}>
                 {teamOptions()}
               </select>
             </div>
@@ -321,9 +313,13 @@ function Register() {
           <div>
             <label>Score</label>
             <div>
-              <select onChange={onHomeScore}>{scoreOptions()}</select>
+              <select value={HomeScore} onChange={onHomeScore}>
+                {scoreOptions()}
+              </select>
               VS
-              <select onChange={onAwayScore}>{scoreOptions()}</select>
+              <select value={AwayScore} onChange={onAwayScore}>
+                {scoreOptions()}
+              </select>
             </div>
           </div>
           <br />
@@ -381,6 +377,12 @@ function Register() {
         showMatch={showMatch}
         setShowMatch={setShowMatch}
         teamOptions={teamOptions}
+        setHomeId={setHomeId}
+        setAwayId={setAwayId}
+        setHomeScore={setHomeScore}
+        setAwayScore={setAwayScore}
+        setRoundCount={setRoundCount}
+        setMatchDay={setMatchDay}
       />
     </main>
   );

@@ -20,10 +20,8 @@ const ProtectedRoute = () => {
       })
         .then((response) => {
           if (response.status === 200) {
-            console.log(response);
             setIsAuthenticated(true);
           } else {
-            console.log(response);
             setIsAuthenticated(false);
             window.location.href = "/login/";
           }

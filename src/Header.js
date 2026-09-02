@@ -21,7 +21,6 @@ function Header() {
       },
     })
       .then((response) => {
-        console.log(response);
         window.location.href = response.url;
       })
       .catch((error) => {

@@ -5,8 +5,27 @@ import Form from "react-bootstrap/Form";
 import { Button, Card } from "react-bootstrap";
 import { GrTextAlignCenter } from "react-icons/gr";
 import "./MatchModal.css";
-function MatchModal({ showMatch, setShowMatch, teamOptions }) {
+function MatchModal({
+  showMatch,
+  setShowMatch,
+  teamOptions,
+  setHomeId,
+  setAwayId,
+  setHomeScore,
+  setAwayScore,
+  setRoundCount,
+  setMatchDay,
+}) {
   const handleClose = () => {
+    setShowMatch(false);
+  };
+  const saveClose = (e) => {
+    setHomeId(e.teams.home.id);
+    setAwayId(e.teams.away.id);
+    setHomeScore(e.goals.home);
+    setAwayScore(e.goals.away);
+    setRoundCount(e.league.round);
+    setMatchDay(e.fixture.date);
     setShowMatch(false);
   };
   const [teamId, SetTeamId] = useState(1);
@@ -47,9 +66,13 @@ function MatchModal({ showMatch, setShowMatch, teamOptions }) {
             className="mb-3"
             style={{ maxHeight: "450px", overflow: "auto" }}
           >
-            {matchInfo.map((match) => {
+            {matchInfo.map((match, index) => {
               return (
-                <Card className="cards" onClick={handleClose}>
+                <Card
+                  key={index}
+                  className="cards"
+                  onClick={() => saveClose(matchInfo[index])}
+                >
                   <Card.Body>
                     <Card.Title>
                       <div
