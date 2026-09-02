@@ -1,6 +1,6 @@
 import { Button } from "react-bootstrap";
 import { useParams } from "react-router";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import Modal from "react-bootstrap/Modal";
 import { useNavigate } from "react-router-dom";
 import "./Register.css";
@@ -8,6 +8,10 @@ import { useDropzone } from "react-dropzone";
 import PictureModal from "./PictureModal";
 import Form from "react-bootstrap/Form";
 import MatchModal from "./MatchModal";
+import "react-datepicker/dist/react-datepicker.css";
+import DatePicker from "react-datepicker";
+import moment from "moment";
+import "moment-timezone";
 function Register() {
   const [Record, setRecord] = useState("");
   const [Title, setTitle] = useState("");
@@ -65,6 +69,16 @@ function Register() {
     setAwayScore(event.target.value);
   };
 
+  const formatDay = (day) => {
+    const formattedDay = day.toISOString().split("T")[0];
+    return formattedDay;
+  };
+  const [MatchDay, setMatchDay] = useState(new Date());
+  const [valid, setValid] = useState(true);
+
+  const FormattedDay = useMemo(() => {
+    return formatDay(MatchDay);
+  }, [MatchDay]);
   const PostRecord = async () => {
     const formData = new FormData();
     const d = {
@@ -74,7 +88,7 @@ function Register() {
       away_team_id: AwayId,
       home_score: HomeScore,
       away_score: AwayScore,
-      match_day: "2024-12-20",
+      match_day: FormattedDay,
       round: RoundCount,
     };
     for (const [k, v] of Object.entries(d)) {
@@ -220,6 +234,16 @@ function Register() {
       </>
     );
   };
+  const handleChangeRaw = (value) => {
+    if (value !== undefined) {
+      if (moment(value, "yyyy-MM-dd", true).isValid()) {
+        setValid(true);
+      } else {
+        setValid(false);
+        setMatchDay(null);
+      }
+    }
+  };
   return (
     <main>
       <div className="content-list">
@@ -273,6 +297,27 @@ function Register() {
               </select>
             </div>
           </div>
+          <br />
+          <Form noValidate>
+            <Form.Label>MatchDay</Form.Label>
+            <Form.Group>
+              <DatePicker
+                dateFormat="yyyy-MM-dd"
+                selected={MatchDay}
+                onChange={(date) => setMatchDay(date)}
+                onChangeRaw={(event) => handleChangeRaw(event.target.value)}
+                placeholderText="yyyy-MM-dd"
+                className={valid ? "form-control " : "form-control is-invalid"}
+              />
+
+              <Form.Control.Feedback
+                type="invalid"
+                className="col-md-6 d-inline-block px-0"
+              >
+                {!valid ? "形式が違います" : ""}
+              </Form.Control.Feedback>
+            </Form.Group>
+          </Form>
           <div>
             <label>Score</label>
             <div>
@@ -281,7 +326,8 @@ function Register() {
               <select onChange={onAwayScore}>{scoreOptions()}</select>
             </div>
           </div>
-          <div style={{ marginTop: "20px", marginBottom: "20px" }}>
+          <br />
+          <div>
             <label>Record</label>
             <div>
               <Form.Control

@@ -2,12 +2,15 @@ import { useParams } from "react-router";
 import "./TeamDetail.css";
 function TeamDetail({ info }) {
   return (
-    <div className="col-11 col-lg-6 content-list" style={{paddingBottom: "2%" }}>
+    <div
+      className="col-11 col-lg-6 content-list"
+      style={{ paddingBottom: "2%" }}
+    >
       <div className="team_info" style={{ marginLeft: "10%" }}>
         <img
           src={info.team.logo}
           alt={info.team.name}
-          width="250"
+          width="300"
           height="auto"
         />
         <img

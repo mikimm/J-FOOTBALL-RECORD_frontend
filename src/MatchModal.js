@@ -4,6 +4,7 @@ import { useDropzone } from "react-dropzone";
 import Form from "react-bootstrap/Form";
 import { Button, Card } from "react-bootstrap";
 import { GrTextAlignCenter } from "react-icons/gr";
+import "./MatchModal.css";
 function MatchModal({ showMatch, setShowMatch, teamOptions }) {
   const handleClose = () => {
     setShowMatch(false);
@@ -39,19 +40,29 @@ function MatchModal({ showMatch, setShowMatch, teamOptions }) {
       </Modal.Header>
       <Modal.Body>
         <Form>
+          <div>
+            <select onChange={onTeamId}>{teamOptions()}</select>
+          </div>
           <Form.Group
             className="mb-3"
             style={{ maxHeight: "450px", overflow: "auto" }}
           >
-            <div>
-              <select onChange={onTeamId}>{teamOptions()}</select>
-            </div>
             {matchInfo.map((match) => {
               return (
-                <Card>
+                <Card className="cards" onClick={handleClose}>
                   <Card.Body>
                     <Card.Title>
-                      {match.league.name}第{match.league.round}節
+                      <div
+                        style={{
+                          display: "flex",
+                          justifyContent: "space-between",
+                        }}
+                      >
+                        <div class="flex-item">
+                          {match.league.name}第{match.league.round}節
+                        </div>
+                        <div class="flex-item">{match.fixture.date}</div>
+                      </div>
                     </Card.Title>
                     <Card.Text>
                       <div
@@ -61,19 +72,17 @@ function MatchModal({ showMatch, setShowMatch, teamOptions }) {
                           justifyContent: "space-between",
                         }}
                       >
-                        <div
-                          style={{
-                            display: "flex",
-                            alignItems: "center",
-                          }}
-                        >
+                        <div class="flex-item">
                           <img
                             src={match.teams.home.logo}
                             style={{ width: "35px", height: "35px" }}
                           />
                           <a>{match.teams.home.name}</a>
                         </div>
-                        <a style={{ fontSize: "15px" }}>{match.goals.home}</a>
+                        <div class="flex-item">
+                          {" "}
+                          <a style={{ fontSize: "15px" }}>{match.goals.home}</a>
+                        </div>
                       </div>
                       <div
                         style={{
@@ -82,19 +91,16 @@ function MatchModal({ showMatch, setShowMatch, teamOptions }) {
                           justifyContent: "space-between",
                         }}
                       >
-                        <div
-                          style={{
-                            display: "flex",
-                            alignItems: "center",
-                          }}
-                        >
+                        <div class="flex-item">
                           <img
                             src={match.teams.away.logo}
                             style={{ width: "35px", height: "35px" }}
                           />
                           <a>{match.teams.away.name}</a>
                         </div>
-                        <a style={{ fontSize: "15px" }}>{match.goals.away}</a>
+                        <div class="flex-item">
+                          <a style={{ fontSize: "15px" }}>{match.goals.away}</a>
+                        </div>
                       </div>
                     </Card.Text>
                   </Card.Body>
@@ -104,9 +110,7 @@ function MatchModal({ showMatch, setShowMatch, teamOptions }) {
           </Form.Group>
         </Form>
       </Modal.Body>
-      <Modal.Footer>
-        <Button variant="primary">Save</Button>
-      </Modal.Footer>
+      <Modal.Footer></Modal.Footer>
     </Modal>
   );
 }
