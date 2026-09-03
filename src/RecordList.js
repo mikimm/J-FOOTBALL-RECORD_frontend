@@ -13,6 +13,23 @@ function RecordList() {
     `http://127.0.0.1:8000/api/v1/records/list?ordering=-id&mine=${mine}`,
   );
   const navigate = useNavigate();
+  const deleteRecord = (params) => {
+    fetch("http://127.0.0.1:8000/api/v1/records/" + params + "/", {
+      credentials: "same-origin",
+      method: "DELETE",
+    })
+      .then((response) => {
+        return response.json();
+      })
+      .then((result) => {
+        const txt = JSON.stringify(result, null, " ");
+        let res = JSON.parse(txt);
+        setRecords(res);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  };
   useEffect(() => {
     fetch(target, {
       credentials: "same-origin",
@@ -28,7 +45,7 @@ function RecordList() {
       .catch((error) => {
         console.error(error);
       });
-  }, [target]);
+  }, [records]);
   if (recordSelect) {
     recordSelect.addEventListener("change", function () {
       if (this.value === "mine") {
@@ -169,7 +186,11 @@ function RecordList() {
                         REVISE
                       </Button>
                       <div>or</div>
-                      <Button variant="danger" style={{ fontSize: 10 }}>
+                      <Button
+                        variant="danger"
+                        style={{ fontSize: 10 }}
+                        onClick={() => deleteRecord(record.id)}
+                      >
                         DELETE
                       </Button>
                     </td>
