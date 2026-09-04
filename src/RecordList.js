@@ -24,12 +24,15 @@ function RecordList() {
       .then((result) => {
         const txt = JSON.stringify(result, null, " ");
         let res = JSON.parse(txt);
-        setRecords(res);
+        setTarget(
+          `http://127.0.0.1:8000/api/v1/records/list?ordering=-id&mine=true`,
+        );
       })
       .catch((error) => {
         console.error(error);
       });
   };
+
   useEffect(() => {
     fetch(target, {
       credentials: "same-origin",
@@ -45,21 +48,20 @@ function RecordList() {
       .catch((error) => {
         console.error(error);
       });
-  }, [records]);
+  }, [target]);
+
   if (recordSelect) {
     recordSelect.addEventListener("change", function () {
       if (this.value === "mine") {
+        setTarget(
+          `http://127.0.0.1:8000/api/v1/records/list?ordering=-id&mine=true`,
+        );
         setMine(true);
-        setTarget(
-          (mine) =>
-            `http://127.0.0.1:8000/api/v1/records/list?ordering=-id&mine=${mine}`,
-        );
       } else {
-        setMine(false);
         setTarget(
-          (mine) =>
-            `http://127.0.0.1:8000/api/v1/records/list?ordering=-id&mine=${mine}`,
+          `http://127.0.0.1:8000/api/v1/records/list?ordering=-id&mine=false`,
         );
+        setMine(false);
       }
     });
   }
@@ -164,7 +166,15 @@ function RecordList() {
                       </p>
                     </td>
                     <td className="title">
-                      <p>{record.title}</p>
+                      <p>
+                        <a
+                          href={
+                            process.env.REACT_APP_DIR + "/record/" + record.id
+                          }
+                        >
+                          {record.title}
+                        </a>
+                      </p>
                     </td>
                     <td className="match-day">
                       <p className="record-match-day">{record.match_day}</p>

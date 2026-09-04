@@ -1,0 +1,9 @@
+.accordion-header .accordion-button:not(.collapsed) {
+  background-color: white;
+  color: black;
+}
+.card-img-top.record-image {
+  width: 50%;
+  margin: auto;
+   display: block;
+}
