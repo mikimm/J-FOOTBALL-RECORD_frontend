@@ -23,6 +23,7 @@ function RecordEdit() {
   const [Postdisabled, setPostdisabled] = useState(true);
   const [register_file, setRegisterFile] = useState(null);
   const [info, setInfo] = useState(null);
+  const [pictureAction, setPictureAction] = useState(null);
   let params = useParams();
   useEffect(() => {
     if (params.id) {
@@ -44,10 +45,6 @@ function RecordEdit() {
           setAwayId(res.away_team_id);
           setRoundCount(res.round);
           setRegisterFile({
-            file: res.file.image,
-            preview: "http://127.0.0.1:8000" + res.file.image,
-          });
-          setFile({
             file: res.file.image,
             preview: "http://127.0.0.1:8000" + res.file.image,
           });
@@ -105,29 +102,33 @@ function RecordEdit() {
   const FormattedDay = useMemo(() => {
     return formatDay(MatchDay);
   }, [MatchDay]);
-  // const PostRecord = async () => {
-  //   const formData = new FormData();
-  //   const d = {
-  //     title: Title,
-  //     record: Record,
-  //     home_team_id: HomeId,
-  //     away_team_id: AwayId,
-  //     home_score: HomeScore,
-  //     away_score: AwayScore,
-  //     match_day: FormattedDay,
-  //     round: RoundCount,
-  //   };
-  //   for (const [k, v] of Object.entries(d)) {
-  //     formData.append(k, v);
-  //   }
-  //   if (file) {
-  //     formData.append("picture", file);
-  //   }
-  //   await fetch(target, {
-  //     method: "POST",
-  //     body: formData,
-  //   }).then(navigate(`/`));
-  // };
+  const EditRecord = async () => {
+    let target = "http://127.0.0.1:8000/api/v1/completed_records/" + params.id;
+    const formData = new FormData();
+    const d = {
+      title: Title,
+      record: Record,
+      home_team_id: HomeId,
+      away_team_id: AwayId,
+      home_score: HomeScore,
+      away_score: AwayScore,
+      match_day: FormattedDay,
+      round: RoundCount,
+    };
+    for (const [k, v] of Object.entries(d)) {
+      formData.append(k, v);
+    }
+    if (file) {
+      formData.append("picture", file);
+    }
+    if (pictureAction) {
+      formData.append("picture_action", pictureAction);
+    }
+    await fetch(target, {
+      method: "PUT",
+      body: formData,
+    }).then(navigate(`/record/${params.id}`));
+  };
   useEffect(() => {
     if (
       Record !== "" &&
@@ -408,8 +409,8 @@ function RecordEdit() {
                 </div>
               </div>
               <Button
+                onClick={EditRecord}
                 disabled={Postdisabled}
-                // onClick={PostRecord}
                 className="m-3 btn btn-primary"
               >
                 Edit
@@ -422,6 +423,7 @@ function RecordEdit() {
               setFile={setFile}
               registerFile={register_file}
               setRegisterFile={setRegisterFile}
+              setPictureAction={setPictureAction}
             />
             <MatchModal
               showMatch={showMatch}

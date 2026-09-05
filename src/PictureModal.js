@@ -10,6 +10,7 @@ function PictureModal({
   setFile,
   registerFile,
   setRegisterFile,
+  setPictureAction,
 }) {
   const { acceptedFiles, getRootProps, getInputProps } = useDropzone();
   const [SaveImagedisabled, setSaveImagdisabled] = useState(true);
@@ -26,6 +27,8 @@ function PictureModal({
     setFile(null);
     setTargetFile(null);
     setRegisterFile(null);
+    // 既存画像を削除するフラグを立てる。API側にこのフラグを送信
+    setPictureAction("delete");
     setShowPicture(false);
     setSaveImagdisabled(true);
   };
