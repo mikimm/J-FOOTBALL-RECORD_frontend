@@ -13,7 +13,7 @@ const BackButton = () => {
       }}
     >
       <button
-        onClick={() => navigate(-1)}
+        onClick={() => navigate("/")}
         style={{
           backgroundColor: "black",
           color: "white",

@@ -2,12 +2,14 @@ import { useParams } from "react-router";
 import React, { useState, useEffect } from "react";
 import Card from "react-bootstrap/Card";
 import Accordion from "react-bootstrap/Accordion";
-import { AccordionCollapse } from "react-bootstrap";
+import { AccordionCollapse, Button } from "react-bootstrap";
 import "./RecordDetail.css";
 import BackButton from "./BackButton";
+import { max } from "moment";
 function RecordDetail() {
   const [info, setInfo] = useState(null);
   const [comments, setComments] = useState(null);
+  const [comment, setComment] = useState("");
   const [error, setError] = useState("");
   let params = useParams();
   useEffect(() => {
@@ -48,6 +50,26 @@ function RecordDetail() {
         });
     }
   }, [params.id]);
+  const postComment = async () => {
+    let target = "http://127.0.0.1:8000/api/v1/comments/" + params.id;
+    fetch(target, {
+      body: JSON.stringify({
+        comment: comment,
+      }),
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      credentials: "same-origin",
+    })
+      .then((response) => {
+        window.location.reload();
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  };
+
   return (
     <div className>
       {info ? (
@@ -117,12 +139,46 @@ function RecordDetail() {
             </Card.Text>
           </Card.Body>
           <Card.Footer>
-            <Accordion>
-              <Accordion.Item>
-                <Accordion.Header>コメント数:{comments.count}</Accordion.Header>
-                <Accordion.Body>コメント一覧</Accordion.Body>
-              </Accordion.Item>
-            </Accordion>
+            {comments ? (
+              <Accordion>
+                <Accordion.Item>
+                  <Accordion.Header>
+                    コメント数:{comments.count}
+                  </Accordion.Header>
+                  <div style={{ textAlign: "center" }}>
+                    <input
+                      style={{ width: "50%" }}
+                      onChange={(e) => setComment(e.target.value)}
+                    ></input>
+                    <Button
+                      style={{
+                        backgroundColor: "black",
+                        color: "white",
+                        borderRadius: "5px",
+                        border: "none",
+                        padding: "5px 20px",
+                        cursor: "pointer",
+                      }}
+                      onClick={postComment}
+                    >
+                      投稿
+                    </Button>
+                  </div>
+                  <div style={{ maxHeight: "35vh", overflow: "scroll" }}>
+                    {comments.comments.map((comment) => (
+                      <Accordion.Body>
+                        <div>{comment?.comment}</div>
+                        <div style={{ textAlign: "right" }}>
+                          comment_by:{comment?.comment_by}
+                        </div>
+                      </Accordion.Body>
+                    ))}
+                  </div>
+                </Accordion.Item>
+              </Accordion>
+            ) : (
+              <div>コメント読み込み中...</div>
+            )}
           </Card.Footer>
         </Card>
       ) : (
