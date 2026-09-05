@@ -24,9 +24,22 @@ function RecordList() {
       .then((result) => {
         const txt = JSON.stringify(result, null, " ");
         let res = JSON.parse(txt);
-        setTarget(
-          `http://127.0.0.1:8000/api/v1/records/list?ordering=-id&mine=true`,
-        );
+      })
+      .then(() => {
+        fetch(target, {
+          credentials: "same-origin",
+        })
+          .then((response) => {
+            return response.json();
+          })
+          .then((result) => {
+            const txt = JSON.stringify(result, null, " ");
+            let res = JSON.parse(txt);
+            setRecords(res);
+          })
+          .catch((error) => {
+            console.error(error);
+          });
       })
       .catch((error) => {
         console.error(error);
@@ -192,6 +205,9 @@ function RecordList() {
                       <Button
                         variant="info"
                         style={{ fontSize: 10, color: "white" }}
+                        onClick={() => {
+                          navigate("/edit/record/" + record.id);
+                        }}
                       >
                         REVISE
                       </Button>

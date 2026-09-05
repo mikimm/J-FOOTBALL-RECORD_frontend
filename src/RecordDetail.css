@@ -5,5 +5,10 @@
 .card-img-top.record-image {
   width: 50%;
   margin: auto;
-   display: block;
+  display: block;
+}
+@media screen and (max-width: 481px) {
+.card-img-top.record-image {
+  width: 100%;
+}
 }

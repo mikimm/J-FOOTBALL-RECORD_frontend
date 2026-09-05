@@ -12,7 +12,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import DatePicker from "react-datepicker";
 import moment from "moment";
 import "moment-timezone";
-function Register() {
+function RecordEdit() {
   const [Record, setRecord] = useState("");
   const [Title, setTitle] = useState("");
   const [RoundCount, setRoundCount] = useState("1");
@@ -22,6 +22,41 @@ function Register() {
   const [AwayScore, setAwayScore] = useState(0);
   const [Postdisabled, setPostdisabled] = useState(true);
   const [register_file, setRegisterFile] = useState(null);
+  const [info, setInfo] = useState(null);
+  let params = useParams();
+  useEffect(() => {
+    if (params.id) {
+      let target = "http://127.0.0.1:8000/api/v1/records/" + params.id;
+      fetch(target, {
+        credentials: "same-origin",
+      })
+        .then((response) => {
+          return response.json();
+        })
+        .then((result) => {
+          const txt = JSON.stringify(result, null, " ");
+          let res = JSON.parse(txt);
+          setInfo(res);
+          setTitle(res.title);
+          setRecord(res.record);
+          setMatchDay(res.match_day);
+          setHomeId(res.home_team_id);
+          setAwayId(res.away_team_id);
+          setRoundCount(res.round);
+          setRegisterFile({
+            file: res.file.image,
+            preview: "http://127.0.0.1:8000" + res.file.image,
+          });
+          setFile({
+            file: res.file.image,
+            preview: "http://127.0.0.1:8000" + res.file.image,
+          });
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    }
+  }, []);
   const [target, setTarget] = useState(
     `http://127.0.0.1:8000/api/v1/completed_records/`,
   );
@@ -70,29 +105,29 @@ function Register() {
   const FormattedDay = useMemo(() => {
     return formatDay(MatchDay);
   }, [MatchDay]);
-  const PostRecord = async () => {
-    const formData = new FormData();
-    const d = {
-      title: Title,
-      record: Record,
-      home_team_id: HomeId,
-      away_team_id: AwayId,
-      home_score: HomeScore,
-      away_score: AwayScore,
-      match_day: FormattedDay,
-      round: RoundCount,
-    };
-    for (const [k, v] of Object.entries(d)) {
-      formData.append(k, v);
-    }
-    if (file) {
-      formData.append("picture", file);
-    }
-    await fetch(target, {
-      method: "POST",
-      body: formData,
-    }).then(navigate(`/`));
-  };
+  // const PostRecord = async () => {
+  //   const formData = new FormData();
+  //   const d = {
+  //     title: Title,
+  //     record: Record,
+  //     home_team_id: HomeId,
+  //     away_team_id: AwayId,
+  //     home_score: HomeScore,
+  //     away_score: AwayScore,
+  //     match_day: FormattedDay,
+  //     round: RoundCount,
+  //   };
+  //   for (const [k, v] of Object.entries(d)) {
+  //     formData.append(k, v);
+  //   }
+  //   if (file) {
+  //     formData.append("picture", file);
+  //   }
+  //   await fetch(target, {
+  //     method: "POST",
+  //     body: formData,
+  //   }).then(navigate(`/`));
+  // };
   useEffect(() => {
     if (
       Record !== "" &&
@@ -245,153 +280,166 @@ function Register() {
   return (
     <main>
       <div className="content-list">
-        <link
-          rel="stylesheet"
-          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
-        ></link>
-        <div
-          className="max-vh-200"
-          style={{
-            textAlign: "center",
-            width: "100%",
-            marginBottom: "5%",
-            maxHeight: "200vh",
-          }}
-        >
-          <div>
-            <div>
-              <Button variant="outline-primary" onClick={handleMatchShow}>
-                Search Match
+        {info ? (
+          <>
+            <link
+              rel="stylesheet"
+              href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
+            ></link>
+            <div
+              className="max-vh-200"
+              style={{
+                textAlign: "center",
+                width: "100%",
+                marginBottom: "5%",
+                maxHeight: "200vh",
+              }}
+            >
+              <div>
+                <div>
+                  <Button variant="outline-primary" onClick={handleMatchShow}>
+                    Search Match
+                  </Button>
+                </div>
+                <label>Title</label>
+                <div>
+                  <input
+                    onChange={onTitleChange}
+                    maxLength="20"
+                    value={Title}
+                  ></input>
+                </div>
+                {Title.length}/20
+              </div>
+              <div>
+                <label>Round</label>
+                <div>
+                  <select
+                    value={RoundCount}
+                    className="w-5"
+                    onChange={onRoundCount}
+                  >
+                    {roundOptions()}
+                  </select>
+                </div>
+              </div>
+              <div>
+                <label>Card</label>
+                <div>
+                  <select value={HomeId} onChange={onHomeId}>
+                    {teamOptions()}
+                  </select>
+                </div>
+                VS
+                <div>
+                  <select value={AwayId} onChange={onAwayId}>
+                    {teamOptions()}
+                  </select>
+                </div>
+              </div>
+              <br />
+              <Form noValidate>
+                <Form.Label>MatchDay</Form.Label>
+                <Form.Group>
+                  <DatePicker
+                    dateFormat="yyyy-MM-dd"
+                    selected={MatchDay}
+                    onChange={(date) => setMatchDay(date)}
+                    onChangeRaw={(event) => handleChangeRaw(event.target.value)}
+                    placeholderText="yyyy-MM-dd"
+                    className={
+                      valid ? "form-control " : "form-control is-invalid"
+                    }
+                  />
+
+                  <Form.Control.Feedback
+                    type="invalid"
+                    className="col-md-6 d-inline-block px-0"
+                  >
+                    {!valid ? "形式が違います" : ""}
+                  </Form.Control.Feedback>
+                </Form.Group>
+              </Form>
+              <div>
+                <label>Score</label>
+                <div>
+                  <select value={HomeScore} onChange={onHomeScore}>
+                    {scoreOptions()}
+                  </select>
+                  VS
+                  <select value={AwayScore} onChange={onAwayScore}>
+                    {scoreOptions()}
+                  </select>
+                </div>
+              </div>
+              <br />
+              <div>
+                <label>Record</label>
+                <div>
+                  <Form.Control
+                    as="textarea"
+                    onChange={onRecordChange}
+                    style={{ width: "80%", margin: "auto", height: "20vh" }}
+                    maxLength="1000"
+                    value={Record}
+                  />
+                  {Record.length}/1000
+                </div>
+              </div>
+              <div
+                className="image-area"
+                style={{
+                  backgroundColor: "white",
+                  width: "80%",
+                  margin: "auto",
+                  border: "3px dotted #000",
+                }}
+              >
+                <label>Image</label>
+                <div onClick={handlePicutureShow} style={{ cursor: "pointer" }}>
+                  Click This Area to Show Modal
+                  <br />
+                  your image will be displayed here
+                  <div>
+                    {register_file && (
+                      <img src={register_file.preview} className="img-field" />
+                    )}
+                  </div>
+                </div>
+              </div>
+              <Button
+                disabled={Postdisabled}
+                // onClick={PostRecord}
+                className="m-3 btn btn-primary"
+              >
+                Edit
               </Button>
             </div>
-            <label>Title</label>
-            <div>
-              <input onChange={onTitleChange} maxLength="20"></input>
-            </div>
-            {Title.length}/20
-          </div>
-          <div>
-            <label>Round</label>
-            <div>
-              <select
-                value={RoundCount}
-                className="w-5"
-                onChange={onRoundCount}
-              >
-                {roundOptions()}
-              </select>
-            </div>
-          </div>
-          <div>
-            <label>Card</label>
-            <div>
-              <select value={HomeId} onChange={onHomeId}>
-                {teamOptions()}
-              </select>
-            </div>
-            VS
-            <div>
-              <select value={AwayId} onChange={onAwayId}>
-                {teamOptions()}
-              </select>
-            </div>
-          </div>
-          <br />
-          <Form noValidate>
-            <Form.Label>MatchDay</Form.Label>
-            <Form.Group>
-              <DatePicker
-                dateFormat="yyyy-MM-dd"
-                selected={MatchDay}
-                onChange={(date) => setMatchDay(date)}
-                onChangeRaw={(event) => handleChangeRaw(event.target.value)}
-                placeholderText="yyyy-MM-dd"
-                className={valid ? "form-control " : "form-control is-invalid"}
-              />
-
-              <Form.Control.Feedback
-                type="invalid"
-                className="col-md-6 d-inline-block px-0"
-              >
-                {!valid ? "形式が違います" : ""}
-              </Form.Control.Feedback>
-            </Form.Group>
-          </Form>
-          <div>
-            <label>Score</label>
-            <div>
-              <select value={HomeScore} onChange={onHomeScore}>
-                {scoreOptions()}
-              </select>
-              VS
-              <select value={AwayScore} onChange={onAwayScore}>
-                {scoreOptions()}
-              </select>
-            </div>
-          </div>
-          <br />
-          <div>
-            <label>Record</label>
-            <div>
-              <Form.Control
-                as="textarea"
-                onChange={onRecordChange}
-                style={{ width: "80%", margin: "auto", height: "20vh" }}
-                maxLength="1000"
-              />
-              {Record.length}/1000
-            </div>
-          </div>
-          <div
-            className="image-area"
-            style={{
-              backgroundColor: "white",
-              width: "80%",
-              margin: "auto",
-              border: "3px dotted #000",
-            }}
-          >
-            <label>Image</label>
-            <div onClick={handlePicutureShow} style={{ cursor: "pointer" }}>
-              Click This Area to Show Modal
-              <br />
-              your image will be displayed here
-              <div>
-                {register_file && (
-                  <img src={register_file.preview} className="img-field" />
-                )}
-              </div>
-            </div>
-          </div>
-          <Button
-            disabled={Postdisabled}
-            onClick={PostRecord}
-            className="m-3 btn btn-primary"
-          >
-            Post
-          </Button>
-        </div>
+            <PictureModal
+              showPicture={showPicture}
+              setShowPicture={setShowPicture}
+              file={file}
+              setFile={setFile}
+              registerFile={register_file}
+              setRegisterFile={setRegisterFile}
+            />
+            <MatchModal
+              showMatch={showMatch}
+              setShowMatch={setShowMatch}
+              teamOptions={teamOptions}
+              setHomeId={setHomeId}
+              setAwayId={setAwayId}
+              setHomeScore={setHomeScore}
+              setAwayScore={setAwayScore}
+              setRoundCount={setRoundCount}
+              setMatchDay={setMatchDay}
+            />
+          </>
+        ) : (
+          <h1>Loading...</h1>
+        )}
       </div>
-      <PictureModal
-        showPicture={showPicture}
-        setShowPicture={setShowPicture}
-        file={file}
-        setFile={setFile}
-        registerFile={register_file}
-        setRegisterFile={setRegisterFile}
-      />
-      <MatchModal
-        showMatch={showMatch}
-        setShowMatch={setShowMatch}
-        teamOptions={teamOptions}
-        setHomeId={setHomeId}
-        setAwayId={setAwayId}
-        setHomeScore={setHomeScore}
-        setAwayScore={setAwayScore}
-        setRoundCount={setRoundCount}
-        setMatchDay={setMatchDay}
-      />
     </main>
   );
 }
-export default Register;
+export default RecordEdit;

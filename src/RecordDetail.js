@@ -4,6 +4,7 @@ import Card from "react-bootstrap/Card";
 import Accordion from "react-bootstrap/Accordion";
 import { AccordionCollapse } from "react-bootstrap";
 import "./RecordDetail.css";
+import BackButton from "./BackButton";
 function RecordDetail() {
   const [info, setInfo] = useState(null);
   const [comments, setComments] = useState(null);
@@ -77,11 +78,11 @@ function RecordDetail() {
                   }}
                 >
                   <div>
-                    {info.home_team.team_name + "(home)"}
                     <img
                       src={info.home_team.team_logo}
                       style={{ width: "50px" }}
                     />
+                    {info.home_team.team_name + "(home)"}
                   </div>
                   {info.home_score}
                 </div>
@@ -95,11 +96,11 @@ function RecordDetail() {
                   }}
                 >
                   <div>
-                    {info.away_team.team_name + "(away)"}
                     <img
                       src={info.away_team.team_logo}
                       style={{ width: "50px" }}
                     />
+                    {info.away_team.team_name + "(away)"}
                   </div>
                   {info.away_score}
                 </div>
@@ -127,6 +128,7 @@ function RecordDetail() {
       ) : (
         <h1>Loading...</h1>
       )}
+      <BackButton />
     </div>
   );
 }

@@ -13,7 +13,7 @@ function PictureModal({
 }) {
   const { acceptedFiles, getRootProps, getInputProps } = useDropzone();
   const [SaveImagedisabled, setSaveImagdisabled] = useState(true);
-  const [target_file, setTargetFile] = useState(null);
+  const [target_file, setTargetFile] = useState(file);
   const handleClose = () => {
     setShowPicture(false);
     setTargetFile(registerFile);

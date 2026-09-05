@@ -77,24 +77,6 @@ function TeamDetailRoot() {
         </main>
       );
     }
-  } else {
-    return (
-      <main>
-        <div className="team_detail">
-          <h1
-            style={{
-              textAlign: "center",
-              marginTop: "20%",
-              marginBottom: "30%",
-              height: "100vh",
-            }}
-          >
-            Not Found
-          </h1>
-          <BackButton />
-        </div>
-      </main>
-    );
   }
 }
 export default TeamDetailRoot;

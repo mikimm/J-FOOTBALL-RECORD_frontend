@@ -9,6 +9,7 @@ import { useEffect } from "react";
 import ProtectedRoute from "./ProtectedRoute";
 import Register from "./Register";
 import RecordDetail from "./RecordDetail";
+import RecordEdit from "./RecordEdit";
 function App() {
   return (
     <div className="App">
@@ -21,6 +22,7 @@ function App() {
             <Route path="/ranking" element={<Ranking />} />
             <Route path="/team/:id" element={<TeamDetailRoot />} />
             <Route path="/record/:id" element={<RecordDetail />} />
+            <Route path="/edit/record/:id" element={<RecordEdit />} />
             <Route path="/register" element={<Register />} />
           </Route>
         </Routes>
