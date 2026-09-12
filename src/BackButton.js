@@ -1,6 +1,5 @@
-import React from "react";
 import { useNavigate } from "react-router-dom";
-const BackButton = () => {
+const BackButton = ({ return_destination }) => {
   const navigate = useNavigate();
   return (
     <div
@@ -13,7 +12,7 @@ const BackButton = () => {
       }}
     >
       <button
-        onClick={() => navigate("/")}
+        onClick={() => navigate(return_destination)}
         style={{
           backgroundColor: "black",
           color: "white",

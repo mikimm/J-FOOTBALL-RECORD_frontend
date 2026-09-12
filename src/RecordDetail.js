@@ -1,16 +1,14 @@
 import { useParams } from "react-router";
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import Card from "react-bootstrap/Card";
 import Accordion from "react-bootstrap/Accordion";
-import { AccordionCollapse, Button } from "react-bootstrap";
+import { Button } from "react-bootstrap";
 import "./RecordDetail.css";
 import BackButton from "./BackButton";
-import { max } from "moment";
 function RecordDetail() {
   const [info, setInfo] = useState(null);
   const [comments, setComments] = useState(null);
   const [comment, setComment] = useState("");
-  const [error, setError] = useState("");
   let params = useParams();
   useEffect(() => {
     if (params.id) {
@@ -29,11 +27,7 @@ function RecordDetail() {
         .catch((error) => {
           console.error(error);
         });
-    }
-  }, [params.id]);
-  useEffect(() => {
-    if (params.id) {
-      let target = "http://127.0.0.1:8000/api/v1/comments/" + params.id;
+      target = "http://127.0.0.1:8000/api/v1/comments/" + params.id;
       fetch(target, {
         credentials: "same-origin",
       })
@@ -142,9 +136,6 @@ function RecordDetail() {
             {comments ? (
               <Accordion>
                 <Accordion.Item>
-                  <Accordion.Header>
-                    コメント数:{comments.count}
-                  </Accordion.Header>
                   <div style={{ textAlign: "center" }}>
                     <input
                       style={{ width: "50%" }}
@@ -164,6 +155,9 @@ function RecordDetail() {
                       投稿
                     </Button>
                   </div>
+                  <Accordion.Header>
+                    コメント数:{comments.count}
+                  </Accordion.Header>
                   <div style={{ maxHeight: "35vh", overflow: "scroll" }}>
                     {comments.comments.map((comment) => (
                       <Accordion.Body>
@@ -184,7 +178,7 @@ function RecordDetail() {
       ) : (
         <h1>Loading...</h1>
       )}
-      <BackButton />
+      <BackButton return_destination={"/"} />
     </div>
   );
 }

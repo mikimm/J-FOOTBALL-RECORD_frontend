@@ -260,7 +260,18 @@ function Register() {
         >
           <div>
             <div>
-              <Button variant="outline-primary" onClick={handleMatchShow}>
+              <Button
+                style={{
+                  backgroundColor: "black",
+                  color: "white",
+                  borderRadius: "5px",
+                  border: "none",
+                  padding: "5px 20px",
+                  cursor: "pointer",
+                  marginTop: "5px",
+                }}
+                onClick={handleMatchShow}
+              >
                 Search Match
               </Button>
             </div>
@@ -366,7 +377,15 @@ function Register() {
           <Button
             disabled={Postdisabled}
             onClick={PostRecord}
-            className="m-3 btn btn-primary"
+            style={{
+              backgroundColor: "black",
+              color: "white",
+              borderRadius: "5px",
+              border: "none",
+              padding: "5px 20px",
+              cursor: "pointer",
+              marginTop: "5px",
+            }}
           >
             Post
           </Button>

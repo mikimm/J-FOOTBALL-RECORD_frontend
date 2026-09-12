@@ -72,7 +72,7 @@ function TeamDetailRoot() {
             </Tabs>
             {key === "team" && <TeamDetail info={info} />}
             {key === "player" && <PlayersList players={info.players} />}
-            <BackButton />
+            <BackButton return_destination={"/teams"} />
           </div>
         </main>
       );

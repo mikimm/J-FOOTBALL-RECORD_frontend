@@ -125,7 +125,18 @@ function RecordList() {
             display: mine ? "block" : "none",
           }}
         >
-          <Button variant="primary" onClick={() => navigate(`/register`)}>
+          <Button
+            style={{
+              backgroundColor: "black",
+              color: "white",
+              borderRadius: "5px",
+              border: "none",
+              padding: "5px 20px",
+              cursor: "pointer",
+              marginTop: "5px",
+            }}
+            onClick={() => navigate(`/register`)}
+          >
             POST
           </Button>
         </div>

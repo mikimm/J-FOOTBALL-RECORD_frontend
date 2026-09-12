@@ -1,10 +1,9 @@
 import { Button } from "react-bootstrap";
 import { useParams } from "react-router";
 import { useState, useEffect, useMemo } from "react";
-import Modal from "react-bootstrap/Modal";
 import { useNavigate } from "react-router-dom";
 import "./Register.css";
-import { useDropzone } from "react-dropzone";
+import BackButton from "./BackButton";
 import PictureModal from "./PictureModal";
 import Form from "react-bootstrap/Form";
 import MatchModal from "./MatchModal";
@@ -12,6 +11,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import DatePicker from "react-datepicker";
 import moment from "moment";
 import "moment-timezone";
+import Card from "react-bootstrap/Card";
 function RecordEdit() {
   const [Record, setRecord] = useState("");
   const [Title, setTitle] = useState("");
@@ -54,9 +54,6 @@ function RecordEdit() {
         });
     }
   }, []);
-  const [target, setTarget] = useState(
-    `http://127.0.0.1:8000/api/v1/completed_records/`,
-  );
   const [showPicture, setShowPicture] = useState(false);
   const [showMatch, setShowMatch] = useState(false);
   const [file, setFile] = useState(null);
@@ -279,169 +276,189 @@ function RecordEdit() {
     }
   };
   return (
-    <main>
-      <div className="content-list">
-        {info ? (
-          <>
-            <link
-              rel="stylesheet"
-              href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
-            ></link>
+    <Card>
+      <Card.Header>投稿編集</Card.Header>
+      {info ? (
+        <>
+          <link
+            rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
+          ></link>
+          <div
+            className="max-vh-200"
+            style={{
+              textAlign: "center",
+              width: "100%",
+              marginBottom: "5%",
+              maxHeight: "200vh",
+            }}
+          >
+            <div>
+              <div>
+                <Button
+                  variant="outline-primary"
+                  onClick={handleMatchShow}
+                  style={{
+                    backgroundColor: "black",
+                    color: "white",
+                    borderRadius: "5px",
+                    border: "none",
+                    padding: "5px 20px",
+                    cursor: "pointer",
+                    marginTop: "5px",
+                  }}
+                >
+                  Search Match
+                </Button>
+              </div>
+              <label>Title</label>
+              <div>
+                <input
+                  onChange={onTitleChange}
+                  maxLength="20"
+                  value={Title}
+                ></input>
+              </div>
+              {Title.length}/20
+            </div>
+            <div>
+              <label>Round</label>
+              <div>
+                <select
+                  value={RoundCount}
+                  className="w-5"
+                  onChange={onRoundCount}
+                >
+                  {roundOptions()}
+                </select>
+              </div>
+            </div>
+            <div>
+              <label>Card</label>
+              <div>
+                <select value={HomeId} onChange={onHomeId}>
+                  {teamOptions()}
+                </select>
+              </div>
+              VS
+              <div>
+                <select value={AwayId} onChange={onAwayId}>
+                  {teamOptions()}
+                </select>
+              </div>
+            </div>
+            <br />
+            <Form noValidate>
+              <Form.Label>MatchDay</Form.Label>
+              <Form.Group>
+                <DatePicker
+                  dateFormat="yyyy-MM-dd"
+                  selected={MatchDay}
+                  onChange={(date) => setMatchDay(date)}
+                  onChangeRaw={(event) => handleChangeRaw(event.target.value)}
+                  placeholderText="yyyy-MM-dd"
+                  className={
+                    valid ? "form-control " : "form-control is-invalid"
+                  }
+                />
+
+                <Form.Control.Feedback
+                  type="invalid"
+                  className="col-md-6 d-inline-block px-0"
+                >
+                  {!valid ? "形式が違います" : ""}
+                </Form.Control.Feedback>
+              </Form.Group>
+            </Form>
+            <div>
+              <label>Score</label>
+              <div>
+                <select value={HomeScore} onChange={onHomeScore}>
+                  {scoreOptions()}
+                </select>
+                VS
+                <select value={AwayScore} onChange={onAwayScore}>
+                  {scoreOptions()}
+                </select>
+              </div>
+            </div>
+            <br />
+            <div>
+              <label>Record</label>
+              <div>
+                <Form.Control
+                  as="textarea"
+                  onChange={onRecordChange}
+                  style={{ width: "80%", margin: "auto", height: "20vh" }}
+                  maxLength="1000"
+                  value={Record}
+                />
+                {Record.length}/1000
+              </div>
+            </div>
             <div
-              className="max-vh-200"
+              className="image-area"
               style={{
-                textAlign: "center",
-                width: "100%",
-                marginBottom: "5%",
-                maxHeight: "200vh",
+                backgroundColor: "white",
+                width: "80%",
+                margin: "auto",
+                border: "3px dotted #000",
               }}
             >
-              <div>
+              <label>Image</label>
+              <div onClick={handlePicutureShow} style={{ cursor: "pointer" }}>
+                Click This Area to Show Modal
+                <br />
+                your image will be displayed here
                 <div>
-                  <Button variant="outline-primary" onClick={handleMatchShow}>
-                    Search Match
-                  </Button>
-                </div>
-                <label>Title</label>
-                <div>
-                  <input
-                    onChange={onTitleChange}
-                    maxLength="20"
-                    value={Title}
-                  ></input>
-                </div>
-                {Title.length}/20
-              </div>
-              <div>
-                <label>Round</label>
-                <div>
-                  <select
-                    value={RoundCount}
-                    className="w-5"
-                    onChange={onRoundCount}
-                  >
-                    {roundOptions()}
-                  </select>
+                  {register_file && (
+                    <img src={register_file.preview} className="img-field" />
+                  )}
                 </div>
               </div>
-              <div>
-                <label>Card</label>
-                <div>
-                  <select value={HomeId} onChange={onHomeId}>
-                    {teamOptions()}
-                  </select>
-                </div>
-                VS
-                <div>
-                  <select value={AwayId} onChange={onAwayId}>
-                    {teamOptions()}
-                  </select>
-                </div>
-              </div>
-              <br />
-              <Form noValidate>
-                <Form.Label>MatchDay</Form.Label>
-                <Form.Group>
-                  <DatePicker
-                    dateFormat="yyyy-MM-dd"
-                    selected={MatchDay}
-                    onChange={(date) => setMatchDay(date)}
-                    onChangeRaw={(event) => handleChangeRaw(event.target.value)}
-                    placeholderText="yyyy-MM-dd"
-                    className={
-                      valid ? "form-control " : "form-control is-invalid"
-                    }
-                  />
-
-                  <Form.Control.Feedback
-                    type="invalid"
-                    className="col-md-6 d-inline-block px-0"
-                  >
-                    {!valid ? "形式が違います" : ""}
-                  </Form.Control.Feedback>
-                </Form.Group>
-              </Form>
-              <div>
-                <label>Score</label>
-                <div>
-                  <select value={HomeScore} onChange={onHomeScore}>
-                    {scoreOptions()}
-                  </select>
-                  VS
-                  <select value={AwayScore} onChange={onAwayScore}>
-                    {scoreOptions()}
-                  </select>
-                </div>
-              </div>
-              <br />
-              <div>
-                <label>Record</label>
-                <div>
-                  <Form.Control
-                    as="textarea"
-                    onChange={onRecordChange}
-                    style={{ width: "80%", margin: "auto", height: "20vh" }}
-                    maxLength="1000"
-                    value={Record}
-                  />
-                  {Record.length}/1000
-                </div>
-              </div>
-              <div
-                className="image-area"
-                style={{
-                  backgroundColor: "white",
-                  width: "80%",
-                  margin: "auto",
-                  border: "3px dotted #000",
-                }}
-              >
-                <label>Image</label>
-                <div onClick={handlePicutureShow} style={{ cursor: "pointer" }}>
-                  Click This Area to Show Modal
-                  <br />
-                  your image will be displayed here
-                  <div>
-                    {register_file && (
-                      <img src={register_file.preview} className="img-field" />
-                    )}
-                  </div>
-                </div>
-              </div>
-              <Button
-                onClick={EditRecord}
-                disabled={Postdisabled}
-                className="m-3 btn btn-primary"
-              >
-                Edit
-              </Button>
             </div>
-            <PictureModal
-              showPicture={showPicture}
-              setShowPicture={setShowPicture}
-              file={file}
-              setFile={setFile}
-              registerFile={register_file}
-              setRegisterFile={setRegisterFile}
-              setPictureAction={setPictureAction}
-            />
-            <MatchModal
-              showMatch={showMatch}
-              setShowMatch={setShowMatch}
-              teamOptions={teamOptions}
-              setHomeId={setHomeId}
-              setAwayId={setAwayId}
-              setHomeScore={setHomeScore}
-              setAwayScore={setAwayScore}
-              setRoundCount={setRoundCount}
-              setMatchDay={setMatchDay}
-            />
-          </>
-        ) : (
-          <h1>Loading...</h1>
-        )}
-      </div>
-    </main>
+            <Button
+              onClick={EditRecord}
+              disabled={Postdisabled}
+              style={{
+                backgroundColor: "black",
+                color: "white",
+                borderRadius: "5px",
+                border: "none",
+                padding: "5px 20px",
+                cursor: "pointer",
+                marginTop: "5px",
+              }}
+            >
+              Edit
+            </Button>
+          </div>
+          <PictureModal
+            showPicture={showPicture}
+            setShowPicture={setShowPicture}
+            file={file}
+            setFile={setFile}
+            registerFile={register_file}
+            setRegisterFile={setRegisterFile}
+            setPictureAction={setPictureAction}
+          />
+          <MatchModal
+            showMatch={showMatch}
+            setShowMatch={setShowMatch}
+            teamOptions={teamOptions}
+            setHomeId={setHomeId}
+            setAwayId={setAwayId}
+            setHomeScore={setHomeScore}
+            setAwayScore={setAwayScore}
+            setRoundCount={setRoundCount}
+            setMatchDay={setMatchDay}
+          />
+          <BackButton return_destination={"/"} />
+        </>
+      ) : (
+        <h1>Loading...</h1>
+      )}
+    </Card>
   );
 }
 export default RecordEdit;
