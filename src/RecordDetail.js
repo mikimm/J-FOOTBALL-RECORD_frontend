@@ -1,14 +1,20 @@
 import { useParams } from "react-router";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Card from "react-bootstrap/Card";
 import Accordion from "react-bootstrap/Accordion";
 import { Button } from "react-bootstrap";
 import "./RecordDetail.css";
 import BackButton from "./BackButton";
+import React from "react";
+
 function RecordDetail() {
   const [info, setInfo] = useState(null);
   const [comments, setComments] = useState(null);
+  const [messages, setMessages] = useState([]);
   const [comment, setComment] = useState("");
+  const [count, setCount] = useState(0);
+  const webSocketRef = useRef(null);
+
   let params = useParams();
   useEffect(() => {
     if (params.id) {
@@ -44,24 +50,79 @@ function RecordDetail() {
         });
     }
   }, [params.id]);
-  const postComment = async () => {
-    let target = "http://127.0.0.1:8000/api/v1/comments/" + params.id;
-    fetch(target, {
-      body: JSON.stringify({
-        comment: comment,
-      }),
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      credentials: "same-origin",
-    })
-      .then((response) => {
-        window.location.reload();
-      })
-      .catch((error) => {
-        console.error(error);
-      });
+  useEffect(() => {
+    // WebSocket接続が既に開かれている場合は、新たに作成しない
+    if (
+      webSocketRef.current &&
+      webSocketRef.current.readyState === WebSocket.OPEN
+    ) {
+      return;
+    }
+
+    webSocketRef.current = new WebSocket(`ws://127.0.0.1:8000/ws/comment/`);
+
+    // 接続が開かれた時の処理
+    const onOpen = () => {
+      console.log("WebSocket Connected");
+    };
+
+    // メッセージ受信時の処理
+    const onMessage = (e) => {
+      const data = JSON.parse(e.data);
+      setMessages((messages) => [...messages, data]);
+      setCount((prevCount) => prevCount + 1);
+      console.log("hello");
+    };
+
+    // エラー発生時の処理
+    const onError = (e) => {
+      console.log("WebSocket Error: ", e);
+    };
+
+    // 接続が閉じられた時の処理
+    const onClose = () => {
+      console.log("WebSocket Disconnected");
+    };
+
+    // イベントリスナーの設定
+    webSocketRef.current.addEventListener("open", onOpen);
+    webSocketRef.current.addEventListener("message", onMessage);
+    webSocketRef.current.addEventListener("error", onError);
+    webSocketRef.current.addEventListener("close", onClose);
+
+    return () => {
+      webSocketRef.current.removeEventListener("open", onOpen);
+
+      webSocketRef.current.removeEventListener("message", onMessage);
+
+      webSocketRef.current.removeEventListener("error", onError);
+
+      webSocketRef.current.removeEventListener("close", onClose);
+
+      // CONNECTINGでもOPENでも閉じる
+
+      if (webSocketRef.current.readyState !== WebSocket.CLOSED) {
+        webSocketRef.current.close();
+      }
+    };
+  }, []);
+  const postComment = async (event) => {
+    event.preventDefault(); // フォームのデフォルト送信を防止
+
+    if (comment.trim() === "") return; // 空のメッセージは送信しない
+
+    if (
+      webSocketRef.current &&
+      webSocketRef.current.readyState === WebSocket.OPEN
+    ) {
+      webSocketRef.current.send(
+        JSON.stringify({
+          type: "message",
+          message: comment,
+        }),
+      );
+    }
+    setComment("");
   };
 
   return (
@@ -139,6 +200,7 @@ function RecordDetail() {
                   <div style={{ textAlign: "center" }}>
                     <input
                       style={{ width: "50%" }}
+                      value={comment}
                       onChange={(e) => setComment(e.target.value)}
                     ></input>
                     <Button
@@ -157,6 +219,7 @@ function RecordDetail() {
                   </div>
                   <Accordion.Header>
                     コメント数:{comments.count}
+                    {count}
                   </Accordion.Header>
                   <div style={{ maxHeight: "35vh", overflow: "scroll" }}>
                     {comments.comments.map((comment) => (
@@ -164,6 +227,14 @@ function RecordDetail() {
                         <div>{comment?.comment}</div>
                         <div style={{ textAlign: "right" }}>
                           comment_by:{comment?.comment_by}
+                        </div>
+                      </Accordion.Body>
+                    ))}
+                    {messages.map((message) => (
+                      <Accordion.Body>
+                        <div>{message?.comment}</div>
+                        <div style={{ textAlign: "right" }}>
+                          comment_by:{message?.comment_by}
                         </div>
                       </Accordion.Body>
                     ))}
