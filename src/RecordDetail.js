@@ -59,7 +59,9 @@ function RecordDetail() {
       return;
     }
 
-    webSocketRef.current = new WebSocket(`ws://127.0.0.1:8000/ws/comment/`);
+    webSocketRef.current = new WebSocket(
+      `ws://127.0.0.1:8000/ws/comment/` + params.id,
+    );
 
     // 接続が開かれた時の処理
     const onOpen = () => {
@@ -71,7 +73,6 @@ function RecordDetail() {
       const data = JSON.parse(e.data);
       setMessages((messages) => [...messages, data]);
       setCount((prevCount) => prevCount + 1);
-      console.log("hello");
     };
 
     // エラー発生時の処理
@@ -218,8 +219,7 @@ function RecordDetail() {
                     </Button>
                   </div>
                   <Accordion.Header>
-                    コメント数:{comments.count}
-                    {count}
+                    コメント数:{comments.count + count}
                   </Accordion.Header>
                   <div style={{ maxHeight: "35vh", overflow: "scroll" }}>
                     {comments.comments.map((comment) => (
