@@ -10,6 +10,7 @@ import ProtectedRoute from "./ProtectedRoute";
 import Register from "./Register";
 import RecordDetail from "./RecordDetail";
 import RecordEdit from "./RecordEdit";
+import Sample from "./Sample";
 function App() {
   return (
     <div className="App">
@@ -24,6 +25,7 @@ function App() {
             <Route path="/record/:id" element={<RecordDetail />} />
             <Route path="/edit/record/:id" element={<RecordEdit />} />
             <Route path="/register" element={<Register />} />
+            <Route path="/sample" element={<Sample />} />
           </Route>
         </Routes>
       </BrowserRouter>
