@@ -1,12 +1,9 @@
 import React, { useState, useEffect } from "react";
-import { NavLink } from "react-router-dom";
-import Nav from "react-bootstrap/Nav";
 import ListGroup from "react-bootstrap/ListGroup";
 import { useNavigate } from "react-router-dom";
 function TeamsList({ leagueNumber }) {
   const navigate = useNavigate();
   const [list_info, setInfo] = useState([]);
-  const groupedTeams = [];
   useEffect(() => {
     if (leagueNumber) {
       let target = "http://127.0.0.1:8000/api/v1/teams/" + leagueNumber;

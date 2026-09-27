@@ -1,10 +1,7 @@
 import { Button } from "react-bootstrap";
-import { useParams } from "react-router";
 import { useState, useEffect, useMemo } from "react";
-import Modal from "react-bootstrap/Modal";
 import { useNavigate } from "react-router-dom";
 import "./Register.css";
-import { useDropzone } from "react-dropzone";
 import PictureModal from "./PictureModal";
 import Form from "react-bootstrap/Form";
 import MatchModal from "./MatchModal";

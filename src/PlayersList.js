@@ -1,6 +1,9 @@
 import "./PlayersList.css";
 import ListGroup from "react-bootstrap/ListGroup";
+import { useParams, useNavigate } from "react-router";
 function PlayersList({ players }) {
+  let params = useParams();
+  const navigate = useNavigate();
   const player_profile = players.map((player) => {
     return (
       <ListGroup.Item
@@ -12,8 +15,8 @@ function PlayersList({ players }) {
           margin: "auto",
         }}
         onClick={() => {
-          // player.idを使って選手詳細画面に遷移
-          console.log(player.id);
+          // params.id(チームID)とplayer.idを使って選手詳細画面に遷移
+          navigate(`/players/${params.id}/${player.id}`);
         }}
       >
         <div className="player_profile" id={player.id}>

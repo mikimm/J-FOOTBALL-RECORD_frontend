@@ -5,12 +5,11 @@ import Teams from "./Teams";
 import Ranking from "./Ranking";
 import TeamDetailRoot from "./TeamDetailRoot";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { useEffect } from "react";
 import ProtectedRoute from "./ProtectedRoute";
 import Register from "./Register";
 import RecordDetail from "./RecordDetail";
 import RecordEdit from "./RecordEdit";
-import Sample from "./Sample";
+import Players from "./Players";
 function App() {
   return (
     <div className="App">
@@ -25,7 +24,7 @@ function App() {
             <Route path="/record/:id" element={<RecordDetail />} />
             <Route path="/edit/record/:id" element={<RecordEdit />} />
             <Route path="/register" element={<Register />} />
-            <Route path="/sample" element={<Sample />} />
+            <Route path="/players/:teamid/:playerid" element={<Players />} />
           </Route>
         </Routes>
       </BrowserRouter>

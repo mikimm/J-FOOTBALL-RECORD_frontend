@@ -1,4 +1,3 @@
-import { useParams } from "react-router";
 import "./TeamDetail.css";
 function TeamDetail({ info }) {
   return (
