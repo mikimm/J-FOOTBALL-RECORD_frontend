@@ -35,7 +35,7 @@ function MatchModal({
   const [matchInfo, setMatchInfo] = useState([]);
   useEffect(() => {
     fetch(target + teamId, {
-      credentials: "same-origin",
+      credentials: "include",
     })
       .then((response) => {
         return response.json();

@@ -29,7 +29,7 @@ function Players() {
     if (params) {
       let target = `http://127.0.0.1:8000/api/v1/palyers/detail/${params.teamid}/${params.playerid}`;
       fetch(target, {
-        credentials: "same-origin",
+        credentials: "include",
       })
         .then((response) => {
           return response.json();

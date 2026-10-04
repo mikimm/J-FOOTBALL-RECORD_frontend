@@ -8,7 +8,7 @@ function TeamsList({ leagueNumber }) {
     if (leagueNumber) {
       let target = "http://127.0.0.1:8000/api/v1/teams/" + leagueNumber;
       fetch(target, {
-        credentials: "same-origin",
+        credentials: "include",
       })
         .then((response) => {
           return response.json();

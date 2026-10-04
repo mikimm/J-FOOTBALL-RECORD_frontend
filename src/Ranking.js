@@ -10,7 +10,7 @@ function Ranking() {
   );
   useEffect(() => {
     fetch(target, {
-      credentials: "same-origin",
+      credentials: "include",
     })
       .then((response) => {
         return response.json();

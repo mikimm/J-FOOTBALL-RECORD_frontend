@@ -15,7 +15,7 @@ function RecordList() {
   const navigate = useNavigate();
   const deleteRecord = (params) => {
     fetch("http://127.0.0.1:8000/api/v1/records/" + params + "/", {
-      credentials: "same-origin",
+      credentials: "include",
       method: "DELETE",
     })
       .then((response) => {
@@ -27,7 +27,7 @@ function RecordList() {
       })
       .then(() => {
         fetch(target, {
-          credentials: "same-origin",
+          credentials: "include",
         })
           .then((response) => {
             return response.json();
@@ -48,7 +48,7 @@ function RecordList() {
 
   useEffect(() => {
     fetch(target, {
-      credentials: "same-origin",
+      credentials: "include",
     })
       .then((response) => {
         return response.json();

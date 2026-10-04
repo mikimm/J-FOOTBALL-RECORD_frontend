@@ -4,11 +4,9 @@ import Container from "react-bootstrap/Container";
 import Navbar from "react-bootstrap/Navbar";
 import NavDropdown from "react-bootstrap/NavDropdown";
 import { NavLink } from "react-router-dom";
-import NavbarCollapse from "react-bootstrap/NavbarCollapse";
-import { useState } from "react";
 import Cookies from "universal-cookie";
 const cookies = new Cookies();
-function Header() {
+function Header({ userName }) {
   const LogoutAction = (e) => {
     const token = cookies.get("csrftoken");
     let target = "/logout/";
@@ -68,17 +66,11 @@ function Header() {
               チーム一覧
             </Nav.Link>
             <NavDropdown
-              title="mikihiro"
+              title={userName}
               id="collapsible-nav-dropdown"
               className="ms-lg-4"
               style={{ fontcolor: "white", width: "100px" }}
             >
-              <NavDropdown.Item
-                href="#action/3.1"
-                style={{ fontcolor: "white" }}
-              >
-                プロフィール設定
-              </NavDropdown.Item>
               <NavDropdown.Item
                 onClick={LogoutAction}
                 style={{ fontcolor: "white" }}

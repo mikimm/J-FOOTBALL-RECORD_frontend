@@ -10,13 +10,15 @@ import Register from "./Register";
 import RecordDetail from "./RecordDetail";
 import RecordEdit from "./RecordEdit";
 import Players from "./Players";
+import { useState } from "react";
 function App() {
+  const [userName, setuserName] = useState(null);
   return (
     <div className="App">
       <BrowserRouter basename={process.env.PUBLIC_URL}>
-        <Header />
+        <Header userName={userName} />
         <Routes>
-          <Route element={<ProtectedRoute />}>
+          <Route element={<ProtectedRoute setuserName={setuserName} />}>
             <Route path="/" element={<TopPage />} />
             <Route path="/teams" element={<Teams />} />
             <Route path="/ranking" element={<Ranking />} />

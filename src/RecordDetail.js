@@ -20,7 +20,7 @@ function RecordDetail() {
     if (params.id) {
       let target = "http://127.0.0.1:8000/api/v1/records/" + params.id;
       fetch(target, {
-        credentials: "same-origin",
+        credentials: "include",
       })
         .then((response) => {
           return response.json();
@@ -35,7 +35,7 @@ function RecordDetail() {
         });
       target = "http://127.0.0.1:8000/api/v1/comments/" + params.id;
       fetch(target, {
-        credentials: "same-origin",
+        credentials: "include",
       })
         .then((response) => {
           return response.json();

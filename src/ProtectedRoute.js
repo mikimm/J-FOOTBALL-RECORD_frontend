@@ -1,10 +1,9 @@
 import { useEffect, useState } from "react";
 import { useNavigate, Outlet } from "react-router-dom";
 
-const ProtectedRoute = () => {
+const ProtectedRoute = ({ setuserName }) => {
   const navigate = useNavigate();
   const [isAuthenticated, setIsAuthenticated] = useState(null); // null: 確認中, true: ログイン済, false: 未ログイン
-
   useEffect(() => {
     // 1. 【戻るボタン対策】（これは毎回登録されても問題ありません）
     const handlePageshow = (event) => {
@@ -15,16 +14,22 @@ const ProtectedRoute = () => {
     window.addEventListener("pageshow", handlePageshow);
 
     const checkAuthStatus = async () => {
-      fetch("/auth/check/", {
-        credentials: "same-origin",
+      fetch("http://127.0.0.1:8000/auth/check/", {
+        credentials: "include",
       })
         .then((response) => {
           if (response.status === 200) {
             setIsAuthenticated(true);
+            return response.json();
           } else {
             setIsAuthenticated(false);
             window.location.href = "/login/";
           }
+        })
+        .then((result) => {
+          const txt = JSON.stringify(result, null, " ");
+          let res = JSON.parse(txt);
+          setuserName(res.username);
         })
         .catch((error) => {
           // 401 Unauthorized などが返ってきた＝ログアウト状態、またはCookieが無効
