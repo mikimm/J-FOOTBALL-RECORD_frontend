@@ -13,6 +13,7 @@ import {
 } from "chart.js";
 import annotationPlugin from "chartjs-plugin-annotation";
 import BackButton from "./BackButton";
+import ErrorModal from "./ErrorModal";
 Chart.register(
   ArcElement,
   Tooltip,
@@ -23,6 +24,7 @@ Chart.register(
   annotationPlugin,
 );
 function Players() {
+  const [errorMessage, setErrorMessage] = useState("");
   let params = useParams();
   const [info, setInfo] = useState();
   useEffect(() => {
@@ -32,7 +34,15 @@ function Players() {
         credentials: "include",
       })
         .then((response) => {
-          return response.json();
+          if (response.ok) {
+            return response.json();
+          } else {
+            return response.json().then((data) => {
+              throw new Error(
+                response.status + "," + response.statusText + "," + data.detail,
+              );
+            });
+          }
         })
         .then((result) => {
           const txt = JSON.stringify(result, null, " ");
@@ -40,11 +50,13 @@ function Players() {
           setInfo(res);
         })
         .catch((error) => {
-          console.error(error);
+          setErrorMessage(error.message);
         });
     }
   }, [params]);
-  if (info) {
+  if (errorMessage) {
+    return <ErrorModal errorMessage={errorMessage} />;
+  } else if (info) {
     //rating,Goals/Assistsの横棒チャートのオプション設定
     const horizontalBarOptions = (maxValue, stepValue) => {
       return {
@@ -283,7 +295,11 @@ function Players() {
           <div className="chart-pass-container">
             <h1>Passes</h1>
             <Doughnut
-              options={doughnutoptions(info.statistics[0].passes.accuracy)}
+              options={doughnutoptions(
+                info.statistics[0].passes.accuracy != null
+                  ? info.statistics[0].passes.accuracy
+                  : 0,
+              )}
               data={pieData(
                 "passes",
                 ["Success", "Error"],
@@ -305,11 +321,13 @@ function Players() {
             <p>Total:{info.statistics[0].passes.total}</p>
             <p>
               Success:
-              {Math.round(
-                (info.statistics[0].passes.total *
-                  info.statistics[0].passes.accuracy) /
-                  100,
-              )}
+              {info.statistics[0].passes.accuracy != null
+                ? Math.round(
+                    (info.statistics[0].passes.total *
+                      info.statistics[0].passes.accuracy) /
+                      100,
+                  )
+                : null}
             </p>
           </div>
           <div className="chart-shots-container">

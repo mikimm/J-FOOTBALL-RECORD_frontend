@@ -5,12 +5,14 @@ import Tabs from "react-bootstrap/Tabs";
 import PlayersList from "./PlayersList";
 import TeamDetail from "./TeamDetail";
 import BackButton from "./BackButton";
+import ErrorModal from "./ErrorModal";
 import "./TeamDetail.css";
 function TeamDetailRoot() {
   const [info, setInfo] = useState([]);
   const [error, setError] = useState("");
   let params = useParams();
   const [key, setKey] = useState("team");
+  const [errorMessage, setErrorMessage] = useState();
   useEffect(() => {
     if (params.id) {
       let target = "http://127.0.0.1:8000/api/v1/teams/detail/" + params.id;
@@ -18,7 +20,15 @@ function TeamDetailRoot() {
         credentials: "include",
       })
         .then((response) => {
-          return response.json();
+          if (response.ok) {
+            return response.json();
+          } else {
+            return response.json().then((data) => {
+              throw new Error(
+                response.status + "," + response.statusText + "," + data.detail,
+              );
+            });
+          }
         })
         .then((result) => {
           const txt = JSON.stringify(result, null, " ");
@@ -26,11 +36,13 @@ function TeamDetailRoot() {
           setInfo(res);
         })
         .catch((error) => {
-          console.error(error);
+          setErrorMessage(error.message);
         });
     }
   }, [params.id]);
-  if (info) {
+  if (errorMessage) {
+    return <ErrorModal errorMessage={errorMessage} />;
+  } else if (info) {
     if ((info.team === undefined) & (info.players === undefined)) {
       return (
         <h1

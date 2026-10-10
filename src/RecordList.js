@@ -4,22 +4,38 @@ import "./TopPage.css";
 import Button from "react-bootstrap/Button";
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import ErrorModal from "./ErrorModal";
+import Cookies from "universal-cookie";
 function RecordList() {
   const [records, setRecords] = useState([]);
   const [order, setOrder] = useState("up");
   const recordSelect = document.getElementById("record-select");
   const [mine, setMine] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
   const [target, setTarget] = useState(
     `http://127.0.0.1:8000/api/v1/records/list?ordering=-id&mine=${mine}`,
   );
   const navigate = useNavigate();
+  const cookies = new Cookies();
+  const token = cookies.get("csrftoken");
   const deleteRecord = (params) => {
     fetch("http://127.0.0.1:8000/api/v1/records/" + params + "/", {
       credentials: "include",
       method: "DELETE",
+      headers: {
+        "X-CSRFToken": token,
+      },
     })
       .then((response) => {
-        return response.json();
+        if (response.ok) {
+          return response.json();
+        } else {
+          return response.json().then((data) => {
+            throw new Error(
+              response.status + "," + response.statusText + "," + data.detail,
+            );
+          });
+        }
       })
       .then((result) => {
         const txt = JSON.stringify(result, null, " ");
@@ -30,7 +46,19 @@ function RecordList() {
           credentials: "include",
         })
           .then((response) => {
-            return response.json();
+            if (response.ok) {
+              return response.json();
+            } else {
+              return response.json().then((data) => {
+                throw new Error(
+                  response.status +
+                    "," +
+                    response.statusText +
+                    "," +
+                    data.detail,
+                );
+              });
+            }
           })
           .then((result) => {
             const txt = JSON.stringify(result, null, " ");
@@ -38,11 +66,11 @@ function RecordList() {
             setRecords(res);
           })
           .catch((error) => {
-            console.error(error);
+            setErrorMessage(error.message);
           });
       })
       .catch((error) => {
-        console.error(error);
+        setErrorMessage(error.message);
       });
   };
 
@@ -51,7 +79,15 @@ function RecordList() {
       credentials: "include",
     })
       .then((response) => {
-        return response.json();
+        if (response.ok) {
+          return response.json();
+        } else {
+          return response.json().then((data) => {
+            throw new Error(
+              response.status + "," + response.statusText + "," + data.detail,
+            );
+          });
+        }
       })
       .then((result) => {
         const txt = JSON.stringify(result, null, " ");
@@ -59,7 +95,7 @@ function RecordList() {
         setRecords(res);
       })
       .catch((error) => {
-        console.error(error);
+        setErrorMessage(error.message);
       });
   }, [target]);
 
@@ -80,175 +116,183 @@ function RecordList() {
   }
   return (
     <main>
-      <div className="content-list">
-        <link
-          rel="stylesheet"
-          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
-        ></link>
-        <SearchBox changeTarget={setTarget} />
-        <a>投稿順</a>
-        <Button
-          variant="light"
-          size="m"
-          id="pvB"
-          style={{
-            backgroundColor: "#F5F5F5",
-          }}
-          onClick={() => {
-            if (
-              target ===
-              `http://127.0.0.1:8000/api/v1/records/list?ordering=-id&mine=${mine}`
-            ) {
-              setOrder(order === "up" ? "down" : "up");
-              setTarget(
-                `http://127.0.0.1:8000/api/v1/records/list?ordering=id&mine=${mine}`,
-              );
-            } else {
-              setOrder(order === "up" ? "down" : "up");
-              setTarget(
-                `http://127.0.0.1:8000/api/v1/records/list?ordering=-id&mine=${mine}`,
-              );
-            }
-          }}
-        >
-          <i class={`bi bi-arrow-${order}-square-fill`}></i>
-        </Button>
-        <select id="record-select" defaultValue="all">
-          <option value="all">投稿一覧</option>
-          <option value="mine">My投稿</option>
-        </select>
-        <div
-          className="record-register"
-          style={{
-            textAlign: "center",
-            marginTop: "20px",
-            display: mine ? "block" : "none",
-          }}
-        >
+      {!errorMessage ? (
+        <div className="content-list">
+          <link
+            rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
+          ></link>
+          <SearchBox changeTarget={setTarget} />
+          <a>投稿順</a>
           <Button
+            variant="light"
+            size="m"
+            id="pvB"
             style={{
-              backgroundColor: "black",
-              color: "white",
-              borderRadius: "5px",
-              border: "none",
-              padding: "5px 20px",
-              cursor: "pointer",
-              marginTop: "5px",
+              backgroundColor: "#F5F5F5",
             }}
-            onClick={() => navigate(`/register`)}
+            onClick={() => {
+              if (
+                target ===
+                `http://127.0.0.1:8000/api/v1/records/list?ordering=-id&mine=${mine}`
+              ) {
+                setOrder(order === "up" ? "down" : "up");
+                setTarget(
+                  `http://127.0.0.1:8000/api/v1/records/list?ordering=id&mine=${mine}`,
+                );
+              } else {
+                setOrder(order === "up" ? "down" : "up");
+                setTarget(
+                  `http://127.0.0.1:8000/api/v1/records/list?ordering=-id&mine=${mine}`,
+                );
+              }
+            }}
           >
-            POST
+            <i class={`bi bi-arrow-${order}-square-fill`}></i>
           </Button>
-        </div>
-        {records.results ? (
-          records.results.length === 0 ? (
-            <h1 style={{ textAlign: "center", marginTop: "20%" }}>Not Found</h1>
-          ) : (
-            <table
-              className="record-list"
-              style={{ textAlign: "center", width: "100%" }}
+          <select id="record-select" defaultValue="all">
+            <option value="all">投稿一覧</option>
+            <option value="mine">My投稿</option>
+          </select>
+          <div
+            className="record-register"
+            style={{
+              textAlign: "center",
+              marginTop: "20px",
+              display: mine ? "block" : "none",
+            }}
+          >
+            <Button
+              style={{
+                backgroundColor: "black",
+                color: "white",
+                borderRadius: "5px",
+                border: "none",
+                padding: "5px 20px",
+                cursor: "pointer",
+                marginTop: "5px",
+              }}
+              onClick={() => navigate(`/register`)}
             >
-              <thead>
-                <tr className="record-header">
-                  <th>card</th>
-                  <th>result</th>
-                  <th>title</th>
-                  <th>match day</th>
-                  <th style={{ display: mine ? "none" : "table-cell" }}>
-                    user
-                  </th>
-                  <th style={{ display: mine ? "table-cell" : "none" }}>
-                    action
-                  </th>
-                  <th className="d-none d-lg-block">nice count</th>
-                </tr>
-              </thead>
-              {records.results.map((record, index) => (
-                <tbody>
-                  <tr key={index} className="record">
-                    <td className="match-info">
-                      <div>第{record.round}節</div>
-                      <a className="home_team">
-                        <img
-                          className="team-logo"
-                          src={record.home_team.team_logo}
-                        />
-                      </a>
-                      <div>vs</div>
-                      <a className="away_team">
-                        <img
-                          className="team-logo"
-                          src={record.away_team.team_logo}
-                        />
-                      </a>
-                    </td>
-                    <td className="result">
-                      <p className="game">
-                        <p className="round">
-                          {record.home_score}-{record.away_score}
-                        </p>
-                      </p>
-                    </td>
-                    <td className="title">
-                      <p>
-                        <a
-                          href={
-                            process.env.REACT_APP_DIR + "/record/" + record.id
-                          }
-                        >
-                          {record.title}
-                        </a>
-                      </p>
-                    </td>
-                    <td className="match-day">
-                      <p className="record-match-day">{record.match_day}</p>
-                    </td>
-                    <td
-                      className="user-name"
-                      style={{ display: mine ? "none" : "table-cell" }}
-                    >
-                      <p>{record.user_name}</p>
-                    </td>
-                    <td
-                      className="action"
-                      style={{ display: mine ? "table-cell" : "none" }}
-                    >
-                      <Button
-                        variant="info"
-                        style={{ fontSize: 10, color: "white" }}
-                        onClick={() => {
-                          navigate("/edit/record/" + record.id);
-                        }}
-                      >
-                        REVISE
-                      </Button>
-                      <div>or</div>
-                      <Button
-                        variant="danger"
-                        style={{ fontSize: 10 }}
-                        onClick={() => deleteRecord(record.id)}
-                      >
-                        DELETE
-                      </Button>
-                    </td>
-                    <td className="d-none d-lg-table-cell">
-                      <p class="fa fa-soccer-ball-o"></p>
-                      <p>{record.nice_count}</p>
-                    </td>
+              POST
+            </Button>
+          </div>
+          {records.results ? (
+            records.results.length === 0 ? (
+              <h1 style={{ textAlign: "center", marginTop: "20%" }}>
+                Not Found
+              </h1>
+            ) : (
+              <table
+                className="record-list"
+                style={{ textAlign: "center", width: "100%" }}
+              >
+                <thead>
+                  <tr className="record-header">
+                    <th>card</th>
+                    <th>result</th>
+                    <th>title</th>
+                    <th>match day</th>
+                    <th style={{ display: mine ? "none" : "table-cell" }}>
+                      user
+                    </th>
+                    <th style={{ display: mine ? "table-cell" : "none" }}>
+                      action
+                    </th>
+                    <th className="d-none d-lg-block">nice count</th>
                   </tr>
-                </tbody>
-              ))}
-            </table>
-          )
-        ) : (
-          <h1 style={{ textAlign: "center", marginTop: "20%" }}>Loading...</h1>
-        )}
-        {records.results && records.results.length > 0 ? (
-          <PageNation records={records} changeTarget={setTarget} />
-        ) : (
-          <></>
-        )}
-      </div>
+                </thead>
+                {records.results.map((record, index) => (
+                  <tbody>
+                    <tr key={index} className="record">
+                      <td className="match-info">
+                        <div>第{record.round}節</div>
+                        <a className="home_team">
+                          <img
+                            className="team-logo"
+                            src={record.home_team.team_logo}
+                          />
+                        </a>
+                        <div>vs</div>
+                        <a className="away_team">
+                          <img
+                            className="team-logo"
+                            src={record.away_team.team_logo}
+                          />
+                        </a>
+                      </td>
+                      <td className="result">
+                        <p className="game">
+                          <p className="round">
+                            {record.home_score}-{record.away_score}
+                          </p>
+                        </p>
+                      </td>
+                      <td className="title">
+                        <p>
+                          <a
+                            href={
+                              process.env.REACT_APP_DIR + "/record/" + record.id
+                            }
+                          >
+                            {record.title}
+                          </a>
+                        </p>
+                      </td>
+                      <td className="match-day">
+                        <p className="record-match-day">{record.match_day}</p>
+                      </td>
+                      <td
+                        className="user-name"
+                        style={{ display: mine ? "none" : "table-cell" }}
+                      >
+                        <p>{record.user_name}</p>
+                      </td>
+                      <td
+                        className="action"
+                        style={{ display: mine ? "table-cell" : "none" }}
+                      >
+                        <Button
+                          variant="info"
+                          style={{ fontSize: 10, color: "white" }}
+                          onClick={() => {
+                            navigate("/edit/record/" + record.id);
+                          }}
+                        >
+                          REVISE
+                        </Button>
+                        <div>or</div>
+                        <Button
+                          variant="danger"
+                          style={{ fontSize: 10 }}
+                          onClick={() => deleteRecord(record.id)}
+                        >
+                          DELETE
+                        </Button>
+                      </td>
+                      <td className="d-none d-lg-table-cell">
+                        <p class="fa fa-soccer-ball-o"></p>
+                        <p>{record.nice_count}</p>
+                      </td>
+                    </tr>
+                  </tbody>
+                ))}
+              </table>
+            )
+          ) : (
+            <h1 style={{ textAlign: "center", marginTop: "20%" }}>
+              Loading...
+            </h1>
+          )}
+          {records.results && records.results.length > 0 ? (
+            <PageNation records={records} changeTarget={setTarget} />
+          ) : (
+            <></>
+          )}
+        </div>
+      ) : (
+        <ErrorModal errorMessage={errorMessage} />
+      )}
     </main>
   );
 }

@@ -11,6 +11,7 @@ import RecordDetail from "./RecordDetail";
 import RecordEdit from "./RecordEdit";
 import Players from "./Players";
 import { useState } from "react";
+import ErrorModal from "./ErrorModal";
 function App() {
   const [userName, setuserName] = useState(null);
   return (
@@ -27,6 +28,16 @@ function App() {
             <Route path="/edit/record/:id" element={<RecordEdit />} />
             <Route path="/register" element={<Register />} />
             <Route path="/players/:teamid/:playerid" element={<Players />} />
+            <Route
+              path="*"
+              element={
+                <ErrorModal
+                  errorMessage={
+                    "404" + "," + "NotFound" + "," + "存在しないURLです"
+                  }
+                />
+              }
+            />
           </Route>
         </Routes>
       </BrowserRouter>

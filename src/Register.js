@@ -9,22 +9,23 @@ import "react-datepicker/dist/react-datepicker.css";
 import DatePicker from "react-datepicker";
 import moment from "moment";
 import "moment-timezone";
+import ErrorModal from "./ErrorModal";
+import Cookies from "universal-cookie";
 function Register() {
   const [Record, setRecord] = useState("");
   const [Title, setTitle] = useState("");
-  const [RoundCount, setRoundCount] = useState("1");
-  const [HomeId, setHomeId] = useState("1");
-  const [AwayId, setAwayId] = useState("2");
+  const [RoundCount, setRoundCount] = useState(1);
+  const [HomeId, setHomeId] = useState(1);
+  const [AwayId, setAwayId] = useState(2);
   const [HomeScore, setHomeScore] = useState(0);
   const [AwayScore, setAwayScore] = useState(0);
   const [Postdisabled, setPostdisabled] = useState(true);
   const [register_file, setRegisterFile] = useState(null);
-  const [target, setTarget] = useState(
-    `http://127.0.0.1:8000/api/v1/completed_records/`,
-  );
+  const target = `http://127.0.0.1:8000/api/v1/completed_records/`;
   const [showPicture, setShowPicture] = useState(false);
   const [showMatch, setShowMatch] = useState(false);
   const [file, setFile] = useState(null);
+  const [errorMessage, setErrorMessage] = useState("");
   const navigate = useNavigate();
   const handlePicutureShow = () => {
     setShowPicture(true);
@@ -63,7 +64,8 @@ function Register() {
   };
   const [MatchDay, setMatchDay] = useState(new Date());
   const [valid, setValid] = useState(true);
-
+  const cookies = new Cookies();
+  const token = cookies.get("csrftoken");
   const FormattedDay = useMemo(() => {
     return formatDay(MatchDay);
   }, [MatchDay]);
@@ -88,7 +90,26 @@ function Register() {
     await fetch(target, {
       method: "POST",
       body: formData,
-    }).then(navigate(`/`));
+      credentials: "include",
+      headers: {
+        "X-CSRFToken": token,
+      },
+    })
+      .then((response) => {
+        if (response.ok) {
+          response.json();
+          return navigate(`/`);
+        } else {
+          return response.json().then((data) => {
+            throw new Error(
+              response.status + "," + response.statusText + "," + data.detail,
+            );
+          });
+        }
+      })
+      .catch((error) => {
+        setErrorMessage(error.message);
+      });
   };
   useEffect(() => {
     if (
@@ -239,175 +260,181 @@ function Register() {
       }
     }
   };
-  return (
-    <main>
-      <div className="content-list">
-        <link
-          rel="stylesheet"
-          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
-        ></link>
-        <div
-          className="max-vh-200"
-          style={{
-            textAlign: "center",
-            width: "100%",
-            marginBottom: "5%",
-            maxHeight: "200vh",
-          }}
-        >
-          <div>
-            <div>
-              <Button
-                style={{
-                  backgroundColor: "black",
-                  color: "white",
-                  borderRadius: "5px",
-                  border: "none",
-                  padding: "5px 20px",
-                  cursor: "pointer",
-                  marginTop: "5px",
-                }}
-                onClick={handleMatchShow}
-              >
-                Search Match
-              </Button>
-            </div>
-            <label>Title</label>
-            <div>
-              <input onChange={onTitleChange} maxLength="20"></input>
-            </div>
-            {Title.length}/20
-          </div>
-          <div>
-            <label>Round</label>
-            <div>
-              <select
-                value={RoundCount}
-                className="w-5"
-                onChange={onRoundCount}
-              >
-                {roundOptions()}
-              </select>
-            </div>
-          </div>
-          <div>
-            <label>Card</label>
-            <div>
-              <select value={HomeId} onChange={onHomeId}>
-                {teamOptions()}
-              </select>
-            </div>
-            VS
-            <div>
-              <select value={AwayId} onChange={onAwayId}>
-                {teamOptions()}
-              </select>
-            </div>
-          </div>
-          <br />
-          <Form noValidate>
-            <Form.Label>MatchDay</Form.Label>
-            <Form.Group>
-              <DatePicker
-                dateFormat="yyyy-MM-dd"
-                selected={MatchDay}
-                onChange={(date) => setMatchDay(date)}
-                onChangeRaw={(event) => handleChangeRaw(event.target.value)}
-                placeholderText="yyyy-MM-dd"
-                className={valid ? "form-control " : "form-control is-invalid"}
-              />
-
-              <Form.Control.Feedback
-                type="invalid"
-                className="col-md-6 d-inline-block px-0"
-              >
-                {!valid ? "形式が違います" : ""}
-              </Form.Control.Feedback>
-            </Form.Group>
-          </Form>
-          <div>
-            <label>Score</label>
-            <div>
-              <select value={HomeScore} onChange={onHomeScore}>
-                {scoreOptions()}
-              </select>
-              VS
-              <select value={AwayScore} onChange={onAwayScore}>
-                {scoreOptions()}
-              </select>
-            </div>
-          </div>
-          <br />
-          <div>
-            <label>Record</label>
-            <div>
-              <Form.Control
-                as="textarea"
-                onChange={onRecordChange}
-                style={{ width: "80%", margin: "auto", height: "20vh" }}
-                maxLength="1000"
-              />
-              {Record.length}/1000
-            </div>
-          </div>
+  if (!errorMessage) {
+    return (
+      <main>
+        <div className="content-list">
+          <link
+            rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
+          ></link>
           <div
-            className="image-area"
+            className="max-vh-200"
             style={{
-              backgroundColor: "white",
-              width: "80%",
-              margin: "auto",
-              border: "3px dotted #000",
+              textAlign: "center",
+              width: "100%",
+              marginBottom: "5%",
+              maxHeight: "200vh",
             }}
           >
-            <label>Image</label>
-            <div onClick={handlePicutureShow} style={{ cursor: "pointer" }}>
-              Click This Area to Show Modal
-              <br />
-              your image will be displayed here
+            <div>
               <div>
-                {register_file && (
-                  <img src={register_file.preview} className="img-field" />
-                )}
+                <Button
+                  style={{
+                    backgroundColor: "black",
+                    color: "white",
+                    borderRadius: "5px",
+                    border: "none",
+                    padding: "5px 20px",
+                    cursor: "pointer",
+                    marginTop: "5px",
+                  }}
+                  onClick={handleMatchShow}
+                >
+                  Search Match
+                </Button>
+              </div>
+              <label>Title</label>
+              <div>
+                <input onChange={onTitleChange} maxLength="20"></input>
+              </div>
+              {Title.length}/20
+            </div>
+            <div>
+              <label>Round</label>
+              <div>
+                <select
+                  value={RoundCount}
+                  className="w-5"
+                  onChange={onRoundCount}
+                >
+                  {roundOptions()}
+                </select>
               </div>
             </div>
+            <div>
+              <label>Card</label>
+              <div>
+                <select value={HomeId} onChange={onHomeId}>
+                  {teamOptions()}
+                </select>
+              </div>
+              VS
+              <div>
+                <select value={AwayId} onChange={onAwayId}>
+                  {teamOptions()}
+                </select>
+              </div>
+            </div>
+            <br />
+            <Form noValidate>
+              <Form.Label>MatchDay</Form.Label>
+              <Form.Group>
+                <DatePicker
+                  dateFormat="yyyy-MM-dd"
+                  selected={MatchDay}
+                  onChange={(date) => setMatchDay(date)}
+                  onChangeRaw={(event) => handleChangeRaw(event.target.value)}
+                  placeholderText="yyyy-MM-dd"
+                  className={
+                    valid ? "form-control " : "form-control is-invalid"
+                  }
+                />
+
+                <Form.Control.Feedback
+                  type="invalid"
+                  className="col-md-6 d-inline-block px-0"
+                >
+                  {!valid ? "形式が違います" : ""}
+                </Form.Control.Feedback>
+              </Form.Group>
+            </Form>
+            <div>
+              <label>Score</label>
+              <div>
+                <select value={HomeScore} onChange={onHomeScore}>
+                  {scoreOptions()}
+                </select>
+                VS
+                <select value={AwayScore} onChange={onAwayScore}>
+                  {scoreOptions()}
+                </select>
+              </div>
+            </div>
+            <br />
+            <div>
+              <label>Record</label>
+              <div>
+                <Form.Control
+                  as="textarea"
+                  onChange={onRecordChange}
+                  style={{ width: "80%", margin: "auto", height: "20vh" }}
+                  maxLength="1000"
+                />
+                {Record.length}/1000
+              </div>
+            </div>
+            <div
+              className="image-area"
+              style={{
+                backgroundColor: "white",
+                width: "80%",
+                margin: "auto",
+                border: "3px dotted #000",
+              }}
+            >
+              <label>Image</label>
+              <div onClick={handlePicutureShow} style={{ cursor: "pointer" }}>
+                Click This Area to Show Modal
+                <br />
+                your image will be displayed here
+                <div>
+                  {register_file && (
+                    <img src={register_file.preview} className="img-field" />
+                  )}
+                </div>
+              </div>
+            </div>
+            <Button
+              disabled={Postdisabled}
+              onClick={PostRecord}
+              style={{
+                backgroundColor: "black",
+                color: "white",
+                borderRadius: "5px",
+                border: "none",
+                padding: "5px 20px",
+                cursor: "pointer",
+                marginTop: "5px",
+              }}
+            >
+              POST
+            </Button>
           </div>
-          <Button
-            disabled={Postdisabled}
-            onClick={PostRecord}
-            style={{
-              backgroundColor: "black",
-              color: "white",
-              borderRadius: "5px",
-              border: "none",
-              padding: "5px 20px",
-              cursor: "pointer",
-              marginTop: "5px",
-            }}
-          >
-            Post
-          </Button>
         </div>
-      </div>
-      <PictureModal
-        showPicture={showPicture}
-        setShowPicture={setShowPicture}
-        file={file}
-        setFile={setFile}
-        registerFile={register_file}
-        setRegisterFile={setRegisterFile}
-      />
-      <MatchModal
-        showMatch={showMatch}
-        setShowMatch={setShowMatch}
-        teamOptions={teamOptions}
-        setHomeId={setHomeId}
-        setAwayId={setAwayId}
-        setHomeScore={setHomeScore}
-        setAwayScore={setAwayScore}
-        setRoundCount={setRoundCount}
-        setMatchDay={setMatchDay}
-      />
-    </main>
-  );
+        <PictureModal
+          showPicture={showPicture}
+          setShowPicture={setShowPicture}
+          file={file}
+          setFile={setFile}
+          registerFile={register_file}
+          setRegisterFile={setRegisterFile}
+        />
+        <MatchModal
+          showMatch={showMatch}
+          setShowMatch={setShowMatch}
+          teamOptions={teamOptions}
+          setHomeId={setHomeId}
+          setAwayId={setAwayId}
+          setHomeScore={setHomeScore}
+          setAwayScore={setAwayScore}
+          setRoundCount={setRoundCount}
+          setMatchDay={setMatchDay}
+        />
+      </main>
+    );
+  } else {
+    return <ErrorModal errorMessage={errorMessage} />;
+  }
 }
 export default Register;
