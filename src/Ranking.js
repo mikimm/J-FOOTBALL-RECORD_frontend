@@ -3,6 +3,9 @@ import Tab from "react-bootstrap/Tab";
 import Tabs from "react-bootstrap/Tabs";
 import "./Ranking.css";
 import ErrorModal from "./ErrorModal";
+import j1_league from "./images/j1_league.png";
+import j2_league from "./images/j2_league.png";
+import j3_league from "./images/j3_league.png";
 function Ranking() {
   const [ranking, setRanking] = useState([]);
   const [key, setKey] = useState("98");
@@ -79,35 +82,17 @@ function Ranking() {
             <Tab
               tabClassName="j1_tab"
               eventKey="98"
-              title={
-                <img
-                  className="league-logo"
-                  src="images/j1_league.png"
-                  width="70"
-                />
-              }
+              title={<img className="league-logo" src={j1_league} width="70" />}
             ></Tab>
             <Tab
               tabClassName="j2_tab"
               eventKey="99"
-              title={
-                <img
-                  className="league-logo"
-                  src="images/j2_league.png"
-                  width="70"
-                />
-              }
+              title={<img className="league-logo" src={j2_league} width="70" />}
             ></Tab>
             <Tab
               tabClassName="j3_tab"
               eventKey="100"
-              title={
-                <img
-                  className="league-logo"
-                  src="images/j3_league.png"
-                  width="70"
-                />
-              }
+              title={<img className="league-logo" src={j3_league} width="70" />}
             ></Tab>
           </Tabs>
           <table className="ranking_table">

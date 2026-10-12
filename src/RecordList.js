@@ -179,7 +179,7 @@ function RecordList() {
           </div>
           {records.results ? (
             records.results.length === 0 ? (
-              <h1 style={{ textAlign: "center", marginTop: "20%" }}>
+              <h1 style={{ textAlign: "center", lineHeight: "100vh" }}>
                 Not Found
               </h1>
             ) : (
