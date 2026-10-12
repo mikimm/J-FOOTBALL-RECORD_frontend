@@ -48,7 +48,18 @@ const ProtectedRoute = ({ setuserName }) => {
   // 🔄 Djangoからの返答を待っている間は、ローディング画面（または何も表示しない）にする
   // これにより、ログイン前の古いキャッシュ画面が一瞬見えるのを完全に防ぎます
   if (isAuthenticated === null) {
-    return <div>Loading...</div>; // または null
+    return (
+      <div
+        style={{
+          height: "100vh",
+          justifyContent: "center",
+          display: "flex",
+          alignItems: "center",
+        }}
+      >
+        <h1>Loading...</h1>
+      </div> // または null
+    );
   }
 
   // 認証成功していれば、本来表示したいコンポーネントを表示

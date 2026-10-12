@@ -80,6 +80,19 @@ function TeamsList({ leagueNumber }) {
           }
         </div>
       );
+    } else {
+      return (
+        <div
+          style={{
+            height: "100vh",
+            justifyContent: "center",
+            display: "flex",
+            alignItems: "center",
+          }}
+        >
+          <h1>Loading...</h1>
+        </div>
+      );
     }
   }
 }

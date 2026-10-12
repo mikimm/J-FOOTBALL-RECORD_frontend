@@ -45,15 +45,20 @@ function TeamDetailRoot() {
   } else if (info) {
     if ((info.team === undefined) & (info.players === undefined)) {
       return (
-        <h1
-          style={{
-            textAlign: "center",
-            marginTop: "20%",
-            marginBottom: "30%",
-          }}
+        <div
+          className="col-11 col-lg-6 content-list"
+          style={{ paddingBottom: "2%" }}
         >
-          Loading...
-        </h1>
+          <h1
+            style={{
+              textAlign: "center",
+              marginTop: "20%",
+              marginBottom: "30%",
+            }}
+          >
+            Loading...
+          </h1>
+        </div>
       );
     } else {
       return (

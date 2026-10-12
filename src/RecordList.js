@@ -280,9 +280,16 @@ function RecordList() {
               </table>
             )
           ) : (
-            <h1 style={{ textAlign: "center", marginTop: "20%" }}>
-              Loading...
-            </h1>
+            <div
+              style={{
+                height: "100vh",
+                justifyContent: "center",
+                display: "flex",
+                alignItems: "center",
+              }}
+            >
+              <h1>Loading...</h1>
+            </div>
           )}
           {records.results && records.results.length > 0 ? (
             <PageNation records={records} changeTarget={setTarget} />
