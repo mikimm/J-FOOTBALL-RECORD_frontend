@@ -7,6 +7,7 @@ import { useNavigate } from "react-router-dom";
 import ErrorModal from "./ErrorModal";
 import Cookies from "universal-cookie";
 function RecordList() {
+  const [viewPort, setViewPort] = useState("100vh");
   const [records, setRecords] = useState([]);
   const [order, setOrder] = useState("up");
   const recordSelect = document.getElementById("record-select");
@@ -92,6 +93,13 @@ function RecordList() {
       .then((result) => {
         const txt = JSON.stringify(result, null, " ");
         let res = JSON.parse(txt);
+        if (res.results.length == 4) {
+          setViewPort("115vh");
+        } else if (res.results.length == 5) {
+          setViewPort("130vh");
+        } else {
+          setViewPort("100vh");
+        }
         setRecords(res);
       })
       .catch((error) => {
@@ -117,7 +125,7 @@ function RecordList() {
   return (
     <main>
       {!errorMessage ? (
-        <div className="content-list">
+        <div className="content-list" style={{ height: viewPort }}>
           <link
             rel="stylesheet"
             href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
